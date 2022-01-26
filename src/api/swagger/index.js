@@ -1,193 +1,202 @@
-const fs = require('fs');
-const path = require('path');
-const parse = require('swagger-parser');
-const beautify = require('js-beautify').js_beautify;
-const swaggerUrl = 'http://localhost:8080/swagger/doc.json';
+const fs = require("fs");
+const path = require("path");
+const parse = require("swagger-parser");
+const beautify = require("js-beautify").js_beautify;
+const swaggerUrl = "http://localhost:8888/swagger/doc.json";
 
 // api接口方法存放目录
-const API_PATH = path.resolve(__dirname, '../../api/type');
+const API_PATH = path.resolve(__dirname, "../../api/type");
 
 console.log("this is", API_PATH);
 
-const repTypeMap = new Map();
+const TypeData = new Map();
 const PathMap = new Map();
+let template = "";
 
 // 判断目录是否存在
-const isExist = (lastPath = '') => {
+const isExist = (lastPath = "") => {
   if (!lastPath) {
     const configPath = `${API_PATH}/config.ts`;
     // api 目录下写入 config文件
     fs.access(configPath, function (err) {
-      if (err && err.code === 'ENOENT') {
-        fs.writeFileSync(`${API_PATH}/config.ts`, "export const ip = 'http://localhost:8080/swagger/doc.json'");
+      if (err && err.code === "ENOENT") {
+        fs.writeFileSync(
+          `${API_PATH}/config.ts`,
+          "export const ip = 'http://localhost:8888/swagger/doc.json'"
+        );
       }
     });
   }
 };
-
-// 写入模板
-// const tplInsertApi = (apiInfo, callback) => {
-//   const keys = Object.keys(apiInfo);
-//   const method = keys[0];
-//   const methodParams = apiInfo[method];
-//   const parameters = methodParams.parameters;
-//   const operationId = methodParams.operationId;
-
-//   // const allPath = apiInfo.allPath;
-//   // const requestName = TransFormBig(moduleName(apiInfo.allPath.split('/')[2]));
-//   let reps = null;
-//   let repData = null;
-
-//   if (apiInfo.get?.parameters[1]) {
-//     const itemList = apiInfo.get.parameters[1].schema['$ref'].split('/');
-//     reps = repTypeMap.get(itemList[itemList.length - 1]);
-//   }
-
-//   if (apiInfo?.post) {
-//     const itemList = apiInfo.post.responses['200'].schema['$ref'].split('/');
-//     repData = repTypeMap.get(itemList[itemList.length - 1]);
-//   }
-
-//   if (apiInfo.get?.parameters && !reps && !repData) {
-//     callback(`
-//     {
-//       type: '${method}',
-//       Params: ${apiInfo.get?.parameters ? 'Url' + operationId : 'any'}
-//     }`);
-//   } else if (apiInfo.get?.parameters && reps && !repData) {
-//     callback(`
-//     {
-//       type: '${method}',
-//       Params: ${apiInfo.get?.parameters ? 'Url' + operationId : 'any'},
-//       RequestBody: ${Object.keys(reps).length === 0 ? 'any' : operationId + 'RequestBody'}
-//     }`);
-//   } else if (apiInfo.get?.parameters && reps && repData) {
-//     callback(`
-//     {
-//       type: '${method}',
-//       Params: ${apiInfo.get?.parameters ? 'Url' + operationId : 'any'},
-//       RequestBody: ${Object.keys(reps).length === 0 ? 'any' : operationId + 'RequestBody'}
-//       ResponseData: ${operationId + 'ResponseData'}
-//     }`);
-//   } else if (!apiInfo.get?.parameters && reps && !repData) {
-//     callback(`
-//     {
-//       type: '${method}',
-//       RequestBody: ${Object.keys(reps).length === 0 ? 'any' : operationId + 'RequestBody'}
-//     }`);
-//   } else if (!apiInfo.get?.parameters && !reps && repData) {
-//     callback(`
-//     {
-//       type: '${method}',
-//       ResponseData: ${operationId + 'ResponseData'}
-//     }`);
-//   } else {
-//     callback(`{
-//       type: '${method}'
-//     }
-//     `);
-//   }
-
-//   return `
-//   /**
-//     * @description ${methodParams.summary}
-//   */
-//   ${TransFormUrlParams(parameters, operationId)}
-//   ${TransFormUrlRqustBody(reps, operationId)}
-//   ${TransFormResponseData(repData, operationId)}
-//   `;
-// };
-
-// 将命名转成驼峰命名
-// const TransFormBig = (name) => {
-//   let isDouble = '';
-//   if (name.indexOf('_') !== -1) {
-//     let chatList = name.split('_');
-//     isDouble = chatList.map((v) => TransFormBig(v));
-//     isDouble = isDouble.join('');
-//     return isDouble;
-//   }
-//   const one = name.charAt(0);
-//   const OneTrs = one.toUpperCase();
-//   return OneTrs + name.slice(1);
-// };
-
-// // 模板名
-// const getModulesName = (apiInfo) => {
-//   const keys = Object.keys(apiInfo);
-//   const method = keys[0];
-//   const methodParams = apiInfo[method];
-//   const operationId = methodParams.operationId;
-//   return operationId;
-// };
-
-// // 写入tsx
-// const writeFileApi = (apiData) => {
-//   // index.tsx
-//   // let tplIndex = `import getUrl from '@/utils/getUrl';\nimport Request from '@/utils/request';\n`;
-//   const urlPathList = [];
-//   let tplIndex = '';
-//   const apiDataLen = apiData.length;
-//   let moduleList = [];
-//   let urlPaths = new Map();
-//   for (let i = 0; i < apiDataLen; i++) {
-//     const item = apiData[i];
-//     let urlType = '';
-//     let text = tplInsertApi(item, (v) => {
-//       urlType = v;
-//     });
-
-//     tplIndex = `${tplIndex}\n${text}\n`;
-//     urlPathList.push(item.allPath);
-
-//     urlPaths.set(item.allPath, urlType);
-//     moduleList.push(getModulesName(item));
-//   }
-//   tplIndex = beautify(tplIndex, { indent_size: 2, max_preserve_newlines: 2 });
-
-//   const template = `
-//   \n${tplIndex}\n
-//   export interface Paths {
-//     ${Array.from(urlPaths).map((v) => `\n'${v[0]}': ${v[1]}\n`)}
-//   }
-//   `;
-//   fs.writeFileSync(`${API_PATH}/config.ts`, template);
-//   return moduleList;
-// };
 
 const gen = async () => {
   isExist();
   try {
     // 解析url 获得
     const parsed = await parse.parse(swaggerUrl);
+
     const typeList = Object.keys(parsed.definitions);
-    console.log(typeList);
-    // console.log(parsed.paths);
+
+    for (const key in parsed.definitions) {
+      TypeData.set(
+        key.split(".").join(""),
+        ObjectInNewType(parsed.definitions[key])
+      );
+    }
 
     for (const path in parsed.paths) {
-      const valueData = parsed.paths
-      const data = {}
+      const valueData = parsed.paths;
+      const data = { ParamsData: {} };
+
+      // console.log("this is path ?? ", path);
 
       if (valueData[path].post) {
-        const typeName = valueData[path].post.tags[0];
-        data.type = 'post';
+        data.type = "post";
+        if (valueData[path].post.parameters[0].in === "body") {
 
-        data.reqData = parsed.definitions[valueData[path].post.parameters[0].schema['$ref'].split('/')[2]]
+          if (valueData[path].post.parameters[0].schema.type === "array"){
+            data.resData = valueData[path].post.parameters[0].schema.items["$ref"]
+            .split("/")[2]
+            .split(".")
+            .join("");
+          } else {
+            data.resData = valueData[path].post.parameters[0].schema["$ref"]
+            .split("/")[2]
+            .split(".")
+            .join("");
+          }
 
-        data.reqName = typeName + valueData[path].post.parameters[0].schema['$ref'].split('/')[2];
 
-        data.resData = parsed.definitions[valueData[path].post.responses['200'].schema['$ref'].split('/')[2]]
+          
+        } else {
+          const list = valueData[path].post.parameters;
 
-        data.resName = typeName + valueData[path].post.responses['200'].schema['$ref'].split('/')[2] 
+          list.forEach((element) => {
+            data.ParamsData[element.name] = element.type;
+          });
+        }
 
-        PathMap.set(path, data)
-        
-        // console.log(data);
+        // data.resData = valueData[path].post.responses["200"].schema["$ref"]
+        //   .split("/")[2]
+        //   .split(".")
+        //   .join("");
+
+        PathMap.set(path, data);
+      } else {
+        const valueData = parsed.paths;
+        const data = { ParamsData: {} };
+
+        // console.log("this is path ?? ", path);
+        data.type = "get";
+        if (valueData[path].get.parameters[0].in === "body") {
+          if (valueData[path].post.parameters[0].schema.type === "array"){
+            data.resData = valueData[path].post.parameters[0].schema.items["$ref"]
+            .split("/")[2]
+            .split(".")
+            .join("");
+          } else {
+            data.resData = valueData[path].post.parameters[0].schema["$ref"]
+            .split("/")[2]
+            .split(".")
+            .join("");
+          }
+
+
+        } else {
+          const list = valueData[path].get.parameters;
+          // console.log("list is ?? ", list);
+
+          list.forEach((element) => {
+            data.ParamsData[element.name] = element.type;
+          });
+        }
+
+        data.resData = valueData[path].get.responses["200"].schema["$ref"]
+          .split("/")[2]
+          .split(".")
+          .join("");
+
+        PathMap.set(path, data);
       }
     }
+
+    // console.log("this is ?? Map", PathMap, TypeData);
+    WriteFileApi();
   } catch (e) {
     console.log(e);
   }
+};
+
+function ObjectInNewType(obj) {
+  const TypeData = obj.properties;
+
+  const newType = {};
+  for (const key in TypeData) {
+    if (TypeData[key]?.$ref) {
+      
+      const child = TypeData[key]?.$ref.split("/")[2];
+      newType[key] = child.split(".").join("");
+    } else if (TypeData[key]?.type === "object") {
+      newType[key] = ObjectInNewType(TypeData[key]);
+    } else {
+      newType[key] = TypeData[key]?.type ?? "undefined";
+    }
+  }
+  newType.required = obj.required || undefined;
+  return newType;
+}
+
+const WriteFileApi = () => {
+  const pathList = [];
+  for (item of PathMap.keys()) {
+    pathList.push(item);
+  }
+
+  const typeName = [];
+
+  for (const iterator of TypeData.keys()) {
+    typeName.push(iterator);
+  }
+
+  const template = `
+  ${typeName.map((v) => {
+    console.log(TypeClassData(TypeData.get(v)));
+    return `\ninterface ${v}{${TypeClassData(TypeData.get(v))}}`;
+  })}
+
+
+  \nexport interface Paths {${pathList.map((v) => {
+    console.log(PathClassData(PathMap.get(v)));
+    return `"${v}": ${PathClassData(PathMap.get(v))}\n`;
+  })}}
+  `;
+  fs.writeFileSync(
+    `${API_PATH}/config.ts`,
+    beautify(template, { indent_size: 2, max_preserve_newlines: 2 })
+  );
+
+  // console.log(template);
+};
+
+const PathClassData = (data) => {
+  Object.keys(data).map((v) => {
+    if (v instanceof Object) {
+      data[v] = PathClassData(data[v]);
+    }
+  });
+
+  return JSON.stringify(data);
+};
+
+const TypeClassData = (value) => {
+  const isList = value?.required || [];
+  delete value.required;
+  return Object.keys(value).map((v) => {
+    if (isList.indexOf(v) !== -1) {
+      return `${v}: ${value[v]}`;
+    }
+    return `${v}?: ${value[v]}`;
+  });
 };
 
 gen();
