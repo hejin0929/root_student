@@ -1,41 +1,66 @@
 interface loginForgetPassword {
-  code ? : string, name ? : string, phone ? : string
-},
+  code: string;
+  name: string;
+  phone: string
+}
+interface loginGetPhoneCode {
+  code: string
+}
 interface loginRepsGetCode {
-  body ? : [object Object], mgsCode ? : integer, mgsText ? : string
-},
+  body ? : loginGetPhoneCode;
+  mgsCode: number;
+  mgsText: string
+}
+interface loginUser {
+  id: string;
+  name: string;
+  token: string
+}
 interface loginUserBody {
-  body ? : [object Object], mgsCode ? : integer, mgsText ? : string
-},
+  body ? : loginUser;
+  mgsCode: number;
+  mgsText: string
+}
 interface loginUserCode {
-  code ? : string, phone ? : string, testData ? : loginUserName
-},
+  code: string;
+  phone: string;
+  testData ? : loginUserName
+}
 interface loginUserName {
-  password ? : string, phone ? : string, thereData ? : loginForgetPassword
-},
+  password: string;
+  phone: string;
+  thereData ? : loginForgetPassword
+}
 interface loginUserSignReps {
-  body ? : string, mgsCode ? : integer, mgsText ? : string
-},
+  body ? : string;
+  mgsCode: number;
+  mgsText: string
+}
 interface loginUserSignType {
-  code ? : string, password ? : string, phone ? : string, thereData ? : loginForgetPassword
-},
-interface loginPathsUserSignReps {},
+  code: string;
+  password: string;
+  phone: string;
+  thereData ? : loginForgetPassword
+}
+interface loginPathsUserSignReps {}
 interface loginPathsUserSignType {}
 
 export interface Paths {
   "/login/user/login": {
-    "ParamsData": {},
-    "type": "post",
-    "resData": "loginUserCode"
-  }, "/login/user/sign": {
-    "ParamsData": {},
-    "type": "post",
-    "resData": "loginPathsUserSignType"
-  }, "/login/user/{phone}": {
-    "ParamsData": {
-      "phone": "string"
-    },
-    "type": "get",
-    "resData": "loginRepsGetCode"
+    ParamsData ? : undefined;
+    type: "post";
+    reqData: loginUserCode;
+    resData: loginUserBody
+  };
+  "/login/user/sign": {
+    ParamsData ? : undefined;
+    type: "post";
+    reqData: loginPathsUserSignType;
+    resData: loginPathsUserSignReps
+  };
+  "/login/user/{phone}": {
+    ParamsData ? : undefined;
+    type: "get";
+    resData: loginRepsGetCode
   }
 }

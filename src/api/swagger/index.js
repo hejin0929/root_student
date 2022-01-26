@@ -11,7 +11,6 @@ console.log("this is", API_PATH);
 
 const TypeData = new Map();
 const PathMap = new Map();
-let template = "";
 
 // 判断目录是否存在
 const isExist = (lastPath = "") => {
@@ -53,21 +52,19 @@ const gen = async () => {
       if (valueData[path].post) {
         data.type = "post";
         if (valueData[path].post.parameters[0].in === "body") {
-
-          if (valueData[path].post.parameters[0].schema.type === "array"){
-            data.resData = valueData[path].post.parameters[0].schema.items["$ref"]
-            .split("/")[2]
-            .split(".")
-            .join("");
+          if (valueData[path].post.parameters[0].schema.type === "array") {
+            data.reqData = valueData[path].post.parameters[0].schema.items[
+              "$ref"
+            ]
+              .split("/")[2]
+              .split(".")
+              .join("");
           } else {
-            data.resData = valueData[path].post.parameters[0].schema["$ref"]
-            .split("/")[2]
-            .split(".")
-            .join("");
+            data.reqData = valueData[path].post.parameters[0].schema["$ref"]
+              .split("/")[2]
+              .split(".")
+              .join("");
           }
-
-
-          
         } else {
           const list = valueData[path].post.parameters;
 
@@ -76,10 +73,19 @@ const gen = async () => {
           });
         }
 
-        // data.resData = valueData[path].post.responses["200"].schema["$ref"]
-        //   .split("/")[2]
-        //   .split(".")
-        //   .join("");
+        if (valueData[path].post.responses["200"].schema.type === "array") {
+          data.resData = valueData[path].post.responses["200"].schema.items[
+            "$ref"
+          ]
+            .split("/")[2]
+            .split(".")
+            .join("");
+        } else {
+          data.resData = valueData[path].post.responses["200"].schema["$ref"]
+            .split("/")[2]
+            .split(".")
+            .join("");
+        }
 
         PathMap.set(path, data);
       } else {
@@ -89,19 +95,19 @@ const gen = async () => {
         // console.log("this is path ?? ", path);
         data.type = "get";
         if (valueData[path].get.parameters[0].in === "body") {
-          if (valueData[path].post.parameters[0].schema.type === "array"){
-            data.resData = valueData[path].post.parameters[0].schema.items["$ref"]
-            .split("/")[2]
-            .split(".")
-            .join("");
+          if (valueData[path].post.parameters[0].schema.type === "array") {
+            data.reqData = valueData[path].post.parameters[0].schema.items[
+              "$ref"
+            ]
+              .split("/")[2]
+              .split(".")
+              .join("");
           } else {
-            data.resData = valueData[path].post.parameters[0].schema["$ref"]
-            .split("/")[2]
-            .split(".")
-            .join("");
+            data.reqData = valueData[path].post.parameters[0].schema["$ref"]
+              .split("/")[2]
+              .split(".")
+              .join("");
           }
-
-
         } else {
           const list = valueData[path].get.parameters;
           // console.log("list is ?? ", list);
@@ -111,10 +117,19 @@ const gen = async () => {
           });
         }
 
-        data.resData = valueData[path].get.responses["200"].schema["$ref"]
-          .split("/")[2]
-          .split(".")
-          .join("");
+        if (valueData[path].get?.responses["200"].schema.type === "array") {
+          data.resData = valueData[path].get.responses["200"].schema.items[
+            "$ref"
+          ]
+            .split("/")[2]
+            .split(".")
+            .join("");
+        } else {
+          data.resData = valueData[path].get.responses["200"].schema["$ref"]
+            .split("/")[2]
+            .split(".")
+            .join("");
+        }
 
         PathMap.set(path, data);
       }
@@ -133,7 +148,6 @@ function ObjectInNewType(obj) {
   const newType = {};
   for (const key in TypeData) {
     if (TypeData[key]?.$ref) {
-      
       const child = TypeData[key]?.$ref.split("/")[2];
       newType[key] = child.split(".").join("");
     } else if (TypeData[key]?.type === "object") {
@@ -159,16 +173,56 @@ const WriteFileApi = () => {
   }
 
   const template = `
-  ${typeName.map((v) => {
-    console.log(TypeClassData(TypeData.get(v)));
-    return `\ninterface ${v}{${TypeClassData(TypeData.get(v))}}`;
-  })}
+  ${typeName
+    .map((v) => {
+      // console.log(TypeClassData(TypeData.get(v)));
+      const paramsData = TypeData.get(v);
+      const isMust = paramsData.required;
+      delete paramsData.required;
+
+      const keys = Object.keys(paramsData);
+
+      return `\ninterface ${v}{${keys
+        .map((v) => {
+          if (paramsData[v] === "integer") {
+            paramsData[v] = "number";
+          }
+          if (isMust?.indexOf(v) !== -1) {
+            return `${v}: ${paramsData[v]}`;
+          }
+          return `${v}?: ${paramsData[v]}`;
+        })
+        .join(";")}}`;
+    })
+    .join("")}
 
 
-  \nexport interface Paths {${pathList.map((v) => {
-    console.log(PathClassData(PathMap.get(v)));
-    return `"${v}": ${PathClassData(PathMap.get(v))}\n`;
-  })}}
+  \nexport interface Paths {${pathList
+    .map((v) => {
+      // console.log(PathClassData(PathMap.get(v)));
+      const data = PathMap.get(v);
+
+      const keys = Object.keys(PathMap.get(v));
+
+      return `"${v}": {${keys.map((v) => {
+        if (v === "type") {
+          return `${v}: "${data[v]}"`;
+        }
+        if(v === "ParamsData"){
+          if(Object.keys(data[v]).length){
+            Object.keys(data[v]).map(vv => {
+              return `${v}: ${data[v][vv]}`
+            })
+          }
+
+          return `${v}?: undefined`
+        }
+
+
+        return `${v}: ${data[v]}`;
+      }).join(";\n")}}\n`;
+    })
+    .join(";")}}
   `;
   fs.writeFileSync(
     `${API_PATH}/config.ts`,
@@ -178,25 +232,25 @@ const WriteFileApi = () => {
   // console.log(template);
 };
 
-const PathClassData = (data) => {
-  Object.keys(data).map((v) => {
-    if (v instanceof Object) {
-      data[v] = PathClassData(data[v]);
-    }
-  });
+// const PathClassData = (data) => {
+//   Object.keys(data).map((v) => {
+//     if (v instanceof Object) {
+//       data[v] = PathClassData(data[v]);
+//     }
+//   });
 
-  return JSON.stringify(data);
-};
+//   return JSON.stringify(data);
+// };
 
-const TypeClassData = (value) => {
-  const isList = value?.required || [];
-  delete value.required;
-  return Object.keys(value).map((v) => {
-    if (isList.indexOf(v) !== -1) {
-      return `${v}: ${value[v]}`;
-    }
-    return `${v}?: ${value[v]}`;
-  });
-};
+// const TypeClassData = (value) => {
+//   const isList = value?.required || [];
+//   delete value.required;
+//   return Object.keys(value).map((v) => {
+//     if (isList.indexOf(v) !== -1) {
+//       return `${v}: ${value[v]}`;
+//     }
+//     return `${v}?: ${value[v]}`;
+//   });
+// };
 
 gen();
