@@ -61,6 +61,7 @@ export interface Paths {
   "/login/user/{phone}": {
     ParamsData ? : undefined;
     type: "get";
-    resData: loginRepsGetCode
+    resData: loginRepsGetCode;
+    reqData: undefined
   }
 }
