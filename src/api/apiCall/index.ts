@@ -1,24 +1,30 @@
 import { Paths } from "../type/config";
 import { AxiosRequest } from "../axios";
+import { Toast } from "antd-mobile";
 
 export async function callApi<
   T extends keyof Paths,
   P extends Paths[T]["ParamsData"],
   Q extends Paths[T]["reqData"]
 >(url: T, data: { params: P; reqData: Q; method: Paths[T]["type"] }) {
-
-  console.log("this is ?? ", data.reqData); 
-  
-
-   const res = await  AxiosRequest({
-        baseURL: "http://localhost:8888/",
-        url,
-        params: data.params,
-        data: data.reqData,
-        method: data.method
+  return new Promise<Paths[T]["resData"]["body"]>((resolve, reject) => {
+    AxiosRequest({
+      baseURL: "http://localhost:8888/",
+      url,
+      params: data.params,
+      data: data.reqData,
+      method: data.method,
     })
+      .then((res: any) => {
+        if (res.mgsCode === 200) {
+          resolve(res.body as Paths[T]["resData"]["body"]);
+          return;
+        }
 
-    return res as  Paths[T]["resData"]
+        Toast.show({ content: res.mgsText });
+
+        reject(res.mgsText);
+      })
+      .catch((err: Error) => reject(err));
+  });
 }
-
-

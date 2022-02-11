@@ -1,6 +1,19 @@
 import axios, { AxiosRequestConfig } from "axios";
-export const AxiosRequest = (data: AxiosRequestConfig) => {
+export const AxiosRequest = (data: AxiosRequestConfig): any => {
   const requset = axios.create(data);
+
+  requset.interceptors.request.use((config) => {
+    console.log(config);
+
+    if (config.url?.indexOf("login") != -1) {
+      return config;
+    }
+    if (localStorage.getItem("token")) {
+      return (config.headers = { token: localStorage.getItem("token") || "" });
+    }
+
+    return (window.location.href = "#/");
+  });
 
   return new Promise((resolve, reject) => {
     switch (data.method) {

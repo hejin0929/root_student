@@ -1,0 +1,9 @@
+.col{
+    display: flex;
+    margin-bottom: 20px;
+    .rightValue{
+        flex: 1;
+        border-bottom: 1px solid #3da86c;
+        margin-left: 5px;
+    }
+}

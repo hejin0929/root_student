@@ -110,11 +110,13 @@ const gen = async () => {
           }
         } else {
           const list = valueData[path].get.parameters;
-          // console.log("list is ?? ", list);
 
           list.forEach((element) => {
             data.ParamsData[element.name] = element.type;
           });
+
+          data.reqData = undefined
+        
         }
 
         if (valueData[path].get?.responses["200"].schema.type === "array") {
@@ -210,9 +212,10 @@ const WriteFileApi = () => {
         }
         if(v === "ParamsData"){
           if(Object.keys(data[v]).length){
-            Object.keys(data[v]).map(vv => {
-              return `${v}: ${data[v][vv]}`
-            })
+            return "ParamsData?:{" + Object.keys(data[v]).map(vv => {
+              console.log(data[v], vv)
+              return `${vv}: ${data[v][vv]}`
+            }) + "}"
           }
 
           return `${v}?: undefined`

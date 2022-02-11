@@ -1,8 +1,3 @@
-interface loginForgetPassword {
-  code: string;
-  name: string;
-  phone: string
-}
 interface loginGetPhoneCode {
   code: string
 }
@@ -28,8 +23,7 @@ interface loginUserCode {
 }
 interface loginUserName {
   password: string;
-  phone: string;
-  thereData ? : loginForgetPassword
+  phone: string
 }
 interface loginUserSignReps {
   body ? : string;
@@ -39,11 +33,8 @@ interface loginUserSignReps {
 interface loginUserSignType {
   code: string;
   password: string;
-  phone: string;
-  thereData ? : loginForgetPassword
+  phone: string
 }
-interface loginPathsUserSignReps {}
-interface loginPathsUserSignType {}
 
 export interface Paths {
   "/login/user/login": {
@@ -55,13 +46,15 @@ export interface Paths {
   "/login/user/sign": {
     ParamsData ? : undefined;
     type: "post";
-    reqData: loginPathsUserSignType;
-    resData: loginPathsUserSignReps
+    reqData: loginUserSignType;
+    resData: loginUserSignReps
   };
   "/login/user/{phone}": {
-    ParamsData ? : undefined;
+    ParamsData ? : {
+      phone: string
+    };
     type: "get";
-    resData: loginRepsGetCode;
-    reqData: undefined
+    reqData: undefined;
+    resData: loginRepsGetCode
   }
 }
