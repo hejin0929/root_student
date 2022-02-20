@@ -32,7 +32,7 @@ export default class LoginStore {
 
   test: TestStore | undefined;
 
-  constructor($$: Look) {
+  constructor({ events: $$ }: { events: Look }) { // $$ 由于改造计划 已变成 { events: {}, router } ...
     this.$$ = $$;
     makeAutoObservable(this);
     console.log("???", $$);
@@ -79,7 +79,7 @@ export default class LoginStore {
       this.UpdateData({ code: res?.code ?? "", isCode: true, count: 60 });
       this.times = setTimeout(() => {
         console.log("???");
-        
+
         this.UpdateData({ count: this.count && this.count - 1 });
         if (this.count === 0 && this.times) {
           clearTimeout(this.times);

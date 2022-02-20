@@ -1,15 +1,30 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ContextStore } from "@store/index";
+import { StoreRouter, useRouter } from "./router";
 
-export const useStore = (store: any, callback?: () => any) => {
+export const useStore = (store: any, callback?: () => void) => {
   const storeMap = useContext(ContextStore);
 
+  const router = useRouter();
+
+  // useEffect(() => router.navigate(), [router.navigate]);
+
   if (!storeMap.get(store)) {
-    const data = storeMap.create(store, callback);
+    const data = storeMap.create(store, {
+      router,
+      callback,
+    });
+
     return data;
   }
 
   return storeMap.get(store);
+};
+
+export const unStore = (store: any) => {
+  const stores = useContext(ContextStore);
+
+  return stores.unStore(store);
 };
 
 export type Look = {
@@ -26,10 +41,19 @@ export class CreateStore {
 
   constructor() {}
 
-  create(store: any, callback?: (call: Look | undefined) => any) {
+  create(
+    store: any,
+    callback?: { router: StoreRouter; callback?: () => void }
+  ) {
     this.watchLook.set(store, this.createWatchQueue());
 
-    this.storeMap.set(store, new store(this.watchLook.get(store)));
+    this.storeMap.set(
+      store,
+      new store({
+        events: this.watchLook.get(store),
+        routers: callback?.router as StoreRouter,
+      })
+    );
     return this.get(store);
   }
 
@@ -37,31 +61,32 @@ export class CreateStore {
     return this.storeMap.get(store);
   }
 
+  // 创建订阅者模式
   createWatchQueue() {
-    const messge = {
+    const message = {
       callbackMap: new Map() as Map<string, (data: any) => any>,
       on: (name: string, callback: (data: any) => any, store?: any) => {
         if (store) {
-          useStore(store);
+          // useStore(store);
           return this.watchLook.get(store)?.callbackMap.set(name, callback);
         }
 
-        if (!messge.callbackMap?.get(name)) {
-          return messge.callbackMap?.set(name, callback);
+        if (!message.callbackMap?.get(name)) {
+          return message.callbackMap?.set(name, callback);
         }
       },
       subscribe: (name: string, data: any, store?: any) => {
         if (store) {
           return this.watchLook.get(store)?.callbackMap.get(name)?.(name);
         }
-        return messge.callbackMap.get(name)?.(data);
+        return message.callbackMap.get(name)?.(data);
       },
       off: (name: string) => {
-        messge.callbackMap.delete(name);
+        message.callbackMap.delete(name);
       },
     };
 
-    return messge;
+    return message;
   }
 
   unStore(store: any) {
