@@ -1,27 +1,31 @@
 import { useContext, useEffect } from "react";
 import { ContextStore } from "@store/index";
-import { StoreRouter, useRouter } from "./router";
+import { Routers, useRouter } from "./router";
+import { Params, useParams } from "react-router-dom";
 
 export const useStore = (store: any, callback?: () => void) => {
   const storeMap = useContext(ContextStore);
 
-  const router = useRouter();
-
-  // useEffect(() => router.navigate(), [router.navigate]);
-
+  const routerParams = useParams();
+  console.log("update in function ?? ", storeMap.get(store));
+  
   if (!storeMap.get(store)) {
+    console.log("???");
+    
     const data = storeMap.create(store, {
-      router,
+      routerParams,
       callback,
     });
 
     return data;
   }
+  useRouter(storeMap.methodsStore);
 
   return storeMap.get(store);
 };
 
 export const unStore = (store: any) => {
+
   const stores = useContext(ContextStore);
 
   return stores.unStore(store);
@@ -34,25 +38,36 @@ export type Look = {
   callbackMap: Map<string, (data: any) => any>;
 };
 
+interface Ages {
+  events: Look,
+  routers: Routers
+}
+
 export class CreateStore {
   watchLook: Map<any, Look> = new Map();
 
   storeMap: Map<any, any> = new Map();
 
-  constructor() {}
+  methodsStore: Routers  | undefined;
+
+  constructor() {
+    this.methodsStore = new Routers();
+  }
 
   create(
     store: any,
-    callback?: { router: StoreRouter; callback?: () => void }
+    callback?: { routerParams: Readonly<Params<string>> ; callback?: () => void }
   ) {
     this.watchLook.set(store, this.createWatchQueue());
-
+    if (this.methodsStore && this.methodsStore.params) {
+      this.methodsStore.params = callback?.routerParams
+    }
     this.storeMap.set(
       store,
       new store({
         events: this.watchLook.get(store),
-        routers: callback?.router as StoreRouter,
-      })
+        routers: this.methodsStore,
+      } as Ages)
     );
     return this.get(store);
   }

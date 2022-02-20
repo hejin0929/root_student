@@ -1,21 +1,19 @@
 import { Look } from "@/store/auth";
-import { StoreRouter } from "@/store/auth/router";
-// import { Routers } from "@/store/auth/router";
+import { Routers } from "@/store/auth/router";
 import { makeAutoObservable, runInAction } from "mobx";
 
 class HomeStore {
   name: string = "";
-  routers: StoreRouter | undefined;
+  routers: Routers | undefined;
   events: Look | undefined;
 
-  constructor({ events, routers }: { events: Look; routers: StoreRouter }) {
+  constructor({ events, routers }: { events: Look; routers: Routers }) {
     this.updateData({ routers, events });
     makeAutoObservable(this);
   }
 
   handleClick() {
-      console.log("???? --->> ");
-      
+    console.log("???? --->> ");
     this.routers?.navigate("/admin");
   }
 
