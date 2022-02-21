@@ -8,7 +8,7 @@ import MyInput from "@/widgets/colInput";
 
 const Login: FC = () => {
   const store: Store = useStore(Store);
-  const test: TestStore = useStore(TestStore);
+  // const test: TestStore = useStore(TestStore);
 
   return (
     <div className={StyleCss.SignBox}>
@@ -33,16 +33,12 @@ const Login: FC = () => {
 
       <Button
         style={{ width: "100%" }}
-        onClick={() => store.handleGetCode()}
+        onClick={() => store.handleClickBottom()}
         color="primary"
       >
-        {store.count
-          ? store.count + "s"
-          : store.isCode
-          ? "注册新用户"
-          : "获取验证码"}
+        {store.viewText}
       </Button>
-      {test.name}
+      {/* {test.name} */}
     </div>
   );
 };

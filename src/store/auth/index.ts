@@ -24,6 +24,8 @@ export class CreateStore {
 
   storeMap: Map<any, any> = new Map();
 
+  // routes =
+
   constructor() {}
 
   create(store: any, callback?: (call: Look | undefined) => any) {
