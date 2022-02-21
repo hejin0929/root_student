@@ -44,7 +44,7 @@ export default class LoginStore {
 
   test: TestStore | undefined;
 
-  constructor($$: Look) {
+  constructor({ events: $$ }: { events: Look }) { // $$ 由于改造计划 已变成 { events: {}, router } ...
     this.$$ = $$;
     makeAutoObservable(this);
     // console.log("???", $$);

@@ -1,15 +1,34 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ContextStore } from "@store/index";
+import { Routers, useRouter } from "./router";
+import { Params, useParams } from "react-router-dom";
 
-export const useStore = (store: any, callback?: () => any) => {
+export const useStore = (store: any, callback?: () => void) => {
   const storeMap = useContext(ContextStore);
 
+  const routerParams = useParams();
+  console.log("update in function ?? ", storeMap.get(store));
+  
   if (!storeMap.get(store)) {
-    const data = storeMap.create(store, callback);
+    console.log("???");
+    
+    const data = storeMap.create(store, {
+      routerParams,
+      callback,
+    });
+
     return data;
   }
+  useRouter(storeMap.methodsStore);
 
   return storeMap.get(store);
+};
+
+export const unStore = (store: any) => {
+
+  const stores = useContext(ContextStore);
+
+  return stores.unStore(store);
 };
 
 export type Look = {
@@ -19,19 +38,37 @@ export type Look = {
   callbackMap: Map<string, (data: any) => any>;
 };
 
+interface Ages {
+  events: Look,
+  routers: Routers
+}
+
 export class CreateStore {
   watchLook: Map<any, Look> = new Map();
 
   storeMap: Map<any, any> = new Map();
 
-  // routes =
+  methodsStore: Routers  | undefined;
 
-  constructor() {}
+  constructor() {
+    this.methodsStore = new Routers();
+  }
 
-  create(store: any, callback?: (call: Look | undefined) => any) {
+  create(
+    store: any,
+    callback?: { routerParams: Readonly<Params<string>> ; callback?: () => void }
+  ) {
     this.watchLook.set(store, this.createWatchQueue());
-
-    this.storeMap.set(store, new store(this.watchLook.get(store)));
+    if (this.methodsStore && this.methodsStore.params) {
+      this.methodsStore.params = callback?.routerParams
+    }
+    this.storeMap.set(
+      store,
+      new store({
+        events: this.watchLook.get(store),
+        routers: this.methodsStore,
+      } as Ages)
+    );
     return this.get(store);
   }
 
@@ -39,31 +76,32 @@ export class CreateStore {
     return this.storeMap.get(store);
   }
 
+  // 创建订阅者模式
   createWatchQueue() {
-    const messge = {
+    const message = {
       callbackMap: new Map() as Map<string, (data: any) => any>,
       on: (name: string, callback: (data: any) => any, store?: any) => {
         if (store) {
-          useStore(store);
+          // useStore(store);
           return this.watchLook.get(store)?.callbackMap.set(name, callback);
         }
 
-        if (!messge.callbackMap?.get(name)) {
-          return messge.callbackMap?.set(name, callback);
+        if (!message.callbackMap?.get(name)) {
+          return message.callbackMap?.set(name, callback);
         }
       },
       subscribe: (name: string, data: any, store?: any) => {
         if (store) {
           return this.watchLook.get(store)?.callbackMap.get(name)?.(name);
         }
-        return messge.callbackMap.get(name)?.(data);
+        return message.callbackMap.get(name)?.(data);
       },
       off: (name: string) => {
-        messge.callbackMap.delete(name);
+        message.callbackMap.delete(name);
       },
     };
 
-    return messge;
+    return message;
   }
 
   unStore(store: any) {
