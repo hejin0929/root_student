@@ -12,7 +12,7 @@ const Login: FC = () => {
 
   return (
     <div className={StyleCss.SignBox}>
-      <h2 className={StyleCss.signTitle}>注册账户</h2>
+      <h2 className={StyleCss.signTitle}>{store.viewTitleText}</h2>
       {store.pageStatic.map((v) => {
         if (!store.isCode && v.value !== "phone") {
           return null;

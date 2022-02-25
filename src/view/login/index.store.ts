@@ -4,6 +4,12 @@ import { Look } from "@/store/auth";
 import classNames from "classnames";
 import { Toast } from "antd-mobile";
 
+enum PageStyle {
+  PASSWORD_LOGIN = 1, // 密码登陆
+  CODE_LOGIN, // 验证码登陆
+  ADD_USER, // 注册
+}
+
 export default class LoginStore {
   // 用户账户输入
   phone: string | undefined;
@@ -14,6 +20,7 @@ export default class LoginStore {
   count: number | undefined;
   times: NodeJS.Timeout | undefined;
   oldPhone: string[] | undefined = [];
+  pageStyleType: PageStyle = 1; 
 
   get pageStatic() {
     return [
@@ -38,6 +45,13 @@ export default class LoginStore {
       ["获取验证码"]: !this.isCode && !this.count,
       ["确认密码"]: this.isPassword,
     });
+  }
+
+  get viewTitleText() {
+    return classNames( {
+      ["欢迎登陆"]: this.pageStyleType === 1 || this.pageStyleType === 2,
+      ["注册用户"]: this.pageStyleType === 3
+    })
   }
 
   $$: Look | undefined;
