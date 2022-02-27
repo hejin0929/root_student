@@ -3,7 +3,7 @@ import { ContextStore } from "@store/index";
 import { Routers, useRouter } from "./router";
 import { Params, useParams } from "react-router-dom";
 
-export const useStore = (store: any, params: any,  callback?: (data: any) => void) => {
+export const useStore = (store: any, params?: any,  callback?: (data: any) => void) => {
   const storeMap = useContext(ContextStore);
 
   const routerParams = useParams();

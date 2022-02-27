@@ -1,8 +1,10 @@
+import { Look } from "@/store/auth";
 import { makeAutoObservable, runInAction } from "mobx";
 
 export type MyFormTypes = {
   name: string;
   value: string;
+  default?: string | boolean | number;
   required?: boolean;
   infoText?: string;
   type?: FormItemTypes;
@@ -30,9 +32,20 @@ export enum FormItemTypes {
 export class MyFormStore {
   data: any = {};
 
-  constructor({ params }: { params: MyFormTypes[] }) {
+  events: Look | undefined;
+
+  constructor({ params, events }: { params: MyFormTypes[]; events: Look }) {
+    const data = {};
+
+    params.forEach((v) => Object.assign(data, { [v.value]: undefined }));
+
+    this.updateData({ data, events });
+
     makeAutoObservable(this);
   }
+
+  // 提交表单触发的函数
+  handleSubmit(data: any) {}
 
   updateData(params: Partial<MyFormStore>) {
     runInAction(() => {
