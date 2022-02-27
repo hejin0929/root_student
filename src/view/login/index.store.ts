@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { callApi } from "@/api/apiCall";
+import { callApi, callApiNotLogin } from "@/api/apiCall";
 import { Look } from "@/store/auth";
 import classNames from "classnames";
 import { Toast } from "antd-mobile";
@@ -89,7 +89,7 @@ export default class LoginStore {
   }
 
   handleTest() {
-    callApi("/login/user/sign", {
+    callApiNotLogin("/login/user/sign", {
       method: "post",
       reqData: {
         phone: this.phone || "",
@@ -107,7 +107,7 @@ export default class LoginStore {
       clearTimeout(this.times);
     }
 
-    callApi("/login/user/{phone}", {
+    callApiNotLogin("/login/user/{phone}", {
       params: { phone: this.phone || "" },
       method: "get",
       reqData: undefined,
@@ -124,7 +124,7 @@ export default class LoginStore {
   }
 
   handleAddUser() {
-    callApi("/login/user/sign", {
+    callApiNotLogin("/login/user/sign", {
       params: undefined,
       method: "post",
       reqData: {
