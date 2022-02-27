@@ -3,7 +3,7 @@ import { ContextStore } from "@store/index";
 import { Routers, useRouter } from "./router";
 import { Params, useParams } from "react-router-dom";
 
-export const useStore = (store: any, callback?: () => void) => {
+export const useStore = (store: any, params: any,  callback?: (data: any) => void) => {
   const storeMap = useContext(ContextStore);
 
   const routerParams = useParams();
@@ -15,6 +15,7 @@ export const useStore = (store: any, callback?: () => void) => {
     const data = storeMap.create(store, {
       routerParams,
       callback,
+      params,
     });
 
     return data;
@@ -56,7 +57,7 @@ export class CreateStore {
 
   create(
     store: any,
-    callback?: { routerParams: Readonly<Params<string>> ; callback?: () => void }
+    callback?: { routerParams: Readonly<Params<string>> ; params: any; callback?: (data: any) => void }
   ) {
     this.watchLook.set(store, this.createWatchQueue());
     if (this.methodsStore && this.methodsStore.params) {
@@ -67,6 +68,7 @@ export class CreateStore {
       new store({
         events: this.watchLook.get(store),
         routers: this.methodsStore,
+        params: callback?.params,
       } as Ages)
     );
     return this.get(store);
