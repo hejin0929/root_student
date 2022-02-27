@@ -1,13 +1,19 @@
-import { useStore } from '@/store/auth';
-import { observer } from 'mobx-react-lite';
-import { FC } from 'react';
-import AdminStore from './index.store';
-
+import { useStore } from "@/store/auth";
+import { observer } from "mobx-react-lite";
+import { FC } from "react";
+import AdminStore from "./index.store";
+import styleCss from "./index.module.scss";
 
 const Admin: FC = () => {
-    const store = useStore(AdminStore);
-    
-    return <div>管理页面</div>
-}
+  const store = useStore(AdminStore);
 
-export default observer(Admin)
+  return (
+    <div className={styleCss.adminPage}>
+      <div className={styleCss.adminMyCenter}>
+            
+      </div>
+    </div>
+  );
+};
+
+export default observer(Admin);
