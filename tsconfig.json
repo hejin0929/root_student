@@ -19,7 +19,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@store/*": ["./src/store/*"],
-      "@myPages/*": ["./src/view/*"]
+      "@myPages/*": ["./src/view/*"],
+      "@widgets/*": ["./src/widgets/*"]
     }
   },
   "include": ["typed-css.d.ts", "**/*.ts", "**/*.tsx"],

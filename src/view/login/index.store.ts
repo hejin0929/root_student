@@ -3,6 +3,7 @@ import { callApi, callApiNotLogin } from "@/api/apiCall";
 import { Look } from "@/store/auth";
 import classNames from "classnames";
 import { Toast } from "antd-mobile";
+import { MyFormTypes } from "@widgets/myForm/index.store";
 
 enum PageStyle {
   PASSWORD_LOGIN = 1, // 密码登陆
