@@ -11,7 +11,7 @@ export const Item: FC<{ v: MyFormTypes; children: ReactNode }> = ({
       key={v.value}
       name={v.value}
       label={v.name}
-      rules={[{ required: v.required || false, message: v.infoText }]}
+      rules={v.rules}
     >
       {children}
     </Form.Item>

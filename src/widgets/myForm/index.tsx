@@ -1,9 +1,10 @@
 import { useStore } from "@/store/auth";
-import { Form, Input } from "antd-mobile";
+import { Button, Form, Input } from "antd-mobile";
 import { observer } from "mobx-react-lite";
 import { FC } from "react";
 import { MyFormStore, MyFormTypes, FormItemTypes } from "./index.store";
 import { Item } from "./index.item";
+import CssStyle from "./index.module.scss";
 
 /**
  *
@@ -11,29 +12,31 @@ import { Item } from "./index.item";
  */
 const MyForm: FC<{
   list: MyFormTypes[];
-  onSubmit: (data: keyof MyFormTypes[]) => {};
+  onSubmit?: (data: any) => void;
+  submitTxt?: string;
 }> = (_props) => {
-  const { list } = _props;
+  const { list, submitTxt = "确认" } = _props;
+  console.log("???? list", list);
 
   const store: MyFormStore = useStore(MyFormStore, list);
 
   const { data } = store;
 
   return (
-    <div>
+    <div className={CssStyle.formMain}>
       <Form onFinish={(value) => store.handleSubmit(value)}>
         {list.map((v) => {
           switch (v.type) {
             case FormItemTypes.INPUT:
               return (
-                <Item v={v}>
+                <Item v={v} key={v.value}>
                   <Input placeholder={v.placeholder} />
                 </Item>
               );
 
             case FormItemTypes.PASSWORD:
               return (
-                <Item v={v}>
+                <Item v={v} key={v.value}>
                   <Input placeholder={v.placeholder} type={"password"} />
                 </Item>
               );
@@ -42,6 +45,11 @@ const MyForm: FC<{
               break;
           }
         })}
+        <Form.Item>
+          <Button color="primary" type="submit" size="large">
+            {submitTxt}
+          </Button>
+        </Form.Item>
       </Form>
     </div>
   );

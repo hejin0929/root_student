@@ -5,6 +5,7 @@ import { useStore } from "@store/auth";
 import { Button } from "antd-mobile";
 import StyleCss from "./index.module.scss";
 import MyInput from "@/widgets/colInput";
+import MyForm from "@widgets/myForm";
 
 const Login: FC = () => {
   const store: Store = useStore(Store);
@@ -27,6 +28,7 @@ const Login: FC = () => {
               }
               value={store[v.value as keyof Store] as string}
             />
+            <MyForm list={store.pageFormLogin} onSubmit={(data: any) =>  { }} />
           </div>
         );
       })}

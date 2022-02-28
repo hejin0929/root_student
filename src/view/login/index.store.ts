@@ -3,12 +3,16 @@ import { callApi, callApiNotLogin } from "@/api/apiCall";
 import { Look } from "@/store/auth";
 import classNames from "classnames";
 import { Toast } from "antd-mobile";
-import { MyFormTypes } from "@widgets/myForm/index.store";
+import { MyFormTypes, FormItemTypes } from "@widgets/myForm/index.store";
 
 enum PageStyle {
   PASSWORD_LOGIN = 1, // 密码登陆
   CODE_LOGIN, // 验证码登陆
   ADD_USER, // 注册
+}
+
+interface FormItems extends MyFormTypes {
+  isShow: boolean;
 }
 
 export default class LoginStore {
@@ -21,7 +25,7 @@ export default class LoginStore {
   count: number | undefined;
   times: NodeJS.Timeout | undefined;
   oldPhone: string[] | undefined = [];
-  pageStyleType: PageStyle = 1; 
+  pageStyleType: PageStyle = 1;
 
   get pageStatic() {
     return [
@@ -39,6 +43,47 @@ export default class LoginStore {
       },
     ];
   }
+  // 获取登陆以及注册表格的验证
+  get pageFormLogin(): FormItems[] {
+    return [
+      {
+        name: "手机:",
+        value: "phone",
+        isShow: true,
+        rules: [
+          {
+            required: true,
+            message: "请输入手机号码!!!",
+          },
+        ],
+        type: FormItemTypes.INPUT
+      },
+      {
+        name: "密码:",
+        value: "password",
+        isShow: true,
+        rules: [
+          {
+            required: true,
+            message: "请输入密码!!!",
+          },
+        ],
+        type: FormItemTypes.PASSWORD
+      },
+      {
+        name: "验证码:",
+        value: "code",
+        isShow: true,
+        rules: [
+          {
+            required: true,
+            message: "请输入验证码!!!",
+          },
+        ],
+        type: FormItemTypes.INPUT
+      },
+    ];
+  }
 
   get viewText() {
     return classNames({
@@ -49,17 +94,18 @@ export default class LoginStore {
   }
 
   get viewTitleText() {
-    return classNames( {
+    return classNames({
       ["欢迎登陆"]: this.pageStyleType === 1 || this.pageStyleType === 2,
-      ["注册用户"]: this.pageStyleType === 3
-    })
+      ["注册用户"]: this.pageStyleType === 3,
+    });
   }
 
   $$: Look | undefined;
 
   test: TestStore | undefined;
 
-  constructor({ events: $$ }: { events: Look }) { // $$ 由于改造计划 已变成 { events: {}, router } ...
+  constructor({ events: $$ }: { events: Look }) {
+    // $$ 由于改造计划 已变成 { events: {}, router } ...
     this.$$ = $$;
     makeAutoObservable(this);
     // console.log("???", $$);
@@ -134,7 +180,7 @@ export default class LoginStore {
         password: this.password,
       },
     }).then((res) => {
-      Toast.show({content: "注册成功"});
+      Toast.show({ content: "注册成功" });
     });
   }
 

@@ -5,8 +5,6 @@ export type MyFormTypes = {
   name: string;
   value: string;
   default?: string | boolean | number;
-  required?: boolean;
-  infoText?: string;
   type?: FormItemTypes;
   selectorItem?: {
     name: string;
@@ -17,6 +15,7 @@ export type MyFormTypes = {
   showPassWord?: boolean;
   datePickerTypes?: string;
   placeholder?: string;
+  rules?: {required?: boolean; message: string}[]
 };
 
 export enum FormItemTypes {
@@ -45,7 +44,10 @@ export class MyFormStore {
   }
 
   // 提交表单触发的函数
-  handleSubmit(data: any) {}
+  handleSubmit(data: any) {
+    console.log("this is ?? ", data);
+    
+  }
 
   updateData(params: Partial<MyFormStore>) {
     runInAction(() => {
