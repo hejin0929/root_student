@@ -16,7 +16,6 @@ const MyForm: FC<{
   submitTxt?: string;
 }> = (_props) => {
   const { list, submitTxt = "确认" } = _props;
-  console.log("???? list", list);
 
   const store: MyFormStore = useStore(MyFormStore, list);
 

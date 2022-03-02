@@ -15,7 +15,7 @@ export type MyFormTypes = {
   showPassWord?: boolean;
   datePickerTypes?: string;
   placeholder?: string;
-  rules?: {required?: boolean; message: string}[]
+  rules?: { required?: boolean; message: string }[];
 };
 
 export enum FormItemTypes {
@@ -35,7 +35,9 @@ export class MyFormStore {
 
   constructor({ params, events }: { params: MyFormTypes[]; events: Look }) {
     const data = {};
-
+    events.on("init", (data) => {
+      console.log("this is a data ?? ", data);
+    });
 
     params?.forEach((v) => Object.assign(data, { [v.value]: undefined }));
 
@@ -46,9 +48,9 @@ export class MyFormStore {
 
   // 提交表单触发的函数
   handleSubmit(data: any) {
-    console.log("???");  
-    
-    this.events?.subscribe("submit", data)
+    console.log("???");
+
+    this.events?.subscribe("submit", data);
   }
 
   updateData(params: Partial<MyFormStore>) {
