@@ -14,32 +14,20 @@ const Login: FC = () => {
   return (
     <div className={StyleCss.SignBox}>
       <h2 className={StyleCss.signTitle}>{store.viewTitleText}</h2>
-      {store.pageStatic.map((v) => {
-        if (!store.isCode && v.value !== "phone") {
-          return null;
-        }
 
-        return (
-          <div key={v.name}>
-            <MyInput
-              name={v.name}
-              updateChange={(vv: string) =>
-                store.UpdateData({ [v.value as keyof Store]: vv })
-              }
-              value={store[v.value as keyof Store] as string}
-            />
-            <MyForm list={store.pageFormLogin} onSubmit={(data: any) =>  { }} />
-          </div>
-        );
-      })}
+      <MyForm
+        list={store.pageFormLogin}
+        onSubmit={(data: any) => {}}
+        submitTxt={store.viewText}
+      />
 
-      <Button
+      {/* <Button
         style={{ width: "100%" }}
         onClick={() => store.handleClickBottom()}
         color="primary"
       >
         {store.viewText}
-      </Button>
+      </Button> */}
       {/* {test.name} */}
     </div>
   );

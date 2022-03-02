@@ -27,23 +27,7 @@ export default class LoginStore {
   times: NodeJS.Timeout | undefined;
   oldPhone: string[] | undefined = [];
   pageStyleType: PageStyle = 1;
-
-  get pageStatic() {
-    return [
-      {
-        name: "手机:",
-        value: "phone",
-      },
-      {
-        name: "密码:",
-        value: "password",
-      },
-      {
-        name: "验证码:",
-        value: "code",
-      },
-    ];
-  }
+  
   // 获取登陆以及注册表格的验证
   get pageFormLogin(): FormItems[] {
     return [
