@@ -36,7 +36,8 @@ export class MyFormStore {
   constructor({ params, events }: { params: MyFormTypes[]; events: Look }) {
     const data = {};
 
-    params.forEach((v) => Object.assign(data, { [v.value]: undefined }));
+
+    params?.forEach((v) => Object.assign(data, { [v.value]: undefined }));
 
     this.updateData({ data, events });
 
@@ -45,8 +46,9 @@ export class MyFormStore {
 
   // 提交表单触发的函数
   handleSubmit(data: any) {
-    console.log("this is ?? ", data);
+    console.log("???");  
     
+    this.events?.subscribe("submit", data)
   }
 
   updateData(params: Partial<MyFormStore>) {

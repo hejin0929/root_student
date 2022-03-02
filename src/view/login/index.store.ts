@@ -4,6 +4,7 @@ import { Look } from "@/store/auth";
 import classNames from "classnames";
 import { Toast } from "antd-mobile";
 import { MyFormTypes, FormItemTypes } from "@widgets/myForm/index.store";
+import { MyFormStore } from "@widgets/myForm/index.store";
 
 enum PageStyle {
   PASSWORD_LOGIN = 1, // 密码登陆
@@ -109,6 +110,11 @@ export default class LoginStore {
     this.$$ = $$;
     makeAutoObservable(this);
     // console.log("???", $$);
+
+    this.$$.on("submit", (data) => {
+      console.log("this is ?? ", data);
+      
+    }, MyFormStore) // MyFormStore 表单提交的触发函数
 
     this.$$.on("password", (data) => {
       if (data.length > 5) {

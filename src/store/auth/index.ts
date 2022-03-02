@@ -3,15 +3,16 @@ import { ContextStore } from "@store/index";
 import { Routers, useRouter } from "./router";
 import { Params, useParams } from "react-router-dom";
 
-export const useStore = (store: any, params?: any,  callback?: (data: any) => void) => {
+export const useStore = (
+  store: any,
+  params?: any,
+  callback?: (data: any) => void
+) => {
   const storeMap = useContext(ContextStore);
 
   const routerParams = useParams();
-  console.log("update in function ?? ", storeMap.get(store));
-  
+
   if (!storeMap.get(store)) {
-    console.log("???");
-    
     const data = storeMap.create(store, {
       routerParams,
       callback,
@@ -26,7 +27,6 @@ export const useStore = (store: any, params?: any,  callback?: (data: any) => vo
 };
 
 export const unStore = (store: any) => {
-
   const stores = useContext(ContextStore);
 
   return stores.unStore(store);
@@ -40,8 +40,8 @@ export type Look = {
 };
 
 interface Ages {
-  events: Look,
-  routers: Routers
+  events: Look;
+  routers: Routers;
 }
 
 export class CreateStore {
@@ -49,7 +49,9 @@ export class CreateStore {
 
   storeMap: Map<any, any> = new Map();
 
-  methodsStore: Routers  | undefined;
+  methodsStore: Routers | undefined;
+
+  aHook: Map<string, any> = new Map();
 
   constructor() {
     this.methodsStore = new Routers();
@@ -57,11 +59,24 @@ export class CreateStore {
 
   create(
     store: any,
-    callback?: { routerParams: Readonly<Params<string>> ; params: any; callback?: (data: any) => void }
+    callback?: {
+      routerParams: Readonly<Params<string>>;
+      params: any;
+      callback?: (data: any) => void;
+    }
   ) {
+    if (this.aHook.get(store) && callback?.params) {
+      new store({
+        events: this.watchLook.get(store),
+        routers: this.methodsStore,
+        params: callback?.params,
+      });
+      this.aHook.delete(store)
+    }
+
     this.watchLook.set(store, this.createWatchQueue());
     if (this.methodsStore && this.methodsStore.params) {
-      this.methodsStore.params = callback?.routerParams
+      this.methodsStore.params = callback?.routerParams;
     }
     this.storeMap.set(
       store,
@@ -84,7 +99,11 @@ export class CreateStore {
       callbackMap: new Map() as Map<string, (data: any) => any>,
       on: (name: string, callback: (data: any) => any, store?: any) => {
         if (store) {
-          // useStore(store);
+          if (!this.watchLook.get(store)) {
+            useStore(store);
+            this.aHook.set(store, store);
+          }
+
           return this.watchLook.get(store)?.callbackMap.set(name, callback);
         }
 
