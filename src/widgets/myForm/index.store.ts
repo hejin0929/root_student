@@ -35,9 +35,8 @@ export class MyFormStore {
 
   constructor({ params, events }: { params: MyFormTypes[]; events: Look }) {
     const data = {};
-    events.on("init", (data) => {
-      console.log("this is a data ?? ", data);
-    });
+    // events.on("init", (data) => {
+    // });
 
     params?.forEach((v) => Object.assign(data, { [v.value]: undefined }));
 

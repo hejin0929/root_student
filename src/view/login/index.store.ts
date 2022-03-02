@@ -27,7 +27,7 @@ export default class LoginStore {
   times: NodeJS.Timeout | undefined;
   oldPhone: string[] | undefined = [];
   pageStyleType: PageStyle = 1;
-  
+
   // 获取登陆以及注册表格的验证
   get pageFormLogin(): FormItems[] {
     return [
@@ -80,9 +80,13 @@ export default class LoginStore {
 
   get viewTitleText() {
     return classNames({
-      ["欢迎登陆"]: this.pageStyleType === 1 || this.pageStyleType === 2,
-      ["注册用户"]: this.pageStyleType === 3,
+      ["LOGIN"]: this.pageStyleType === 1 || this.pageStyleType === 2,
+      ["NEW USERS"]: this.pageStyleType === 3,
     });
+  }
+
+  get viewTitleLeftText () {
+    return ""
   }
 
   $$: Look | undefined;

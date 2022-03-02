@@ -1,6 +1,31 @@
 .SignBox{
     margin: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
     .signTitle{
         text-align: center;
+        font-size: 30px;
+        width: 90vw;
+        .textRight{
+            font-size: 12px;
+            float: right;
+            color: #57c038;
+        }
+    }
+
+    .loginImg{
+        margin-bottom: 20px;
+
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .formMains{
+        width: 90vw;
     }
 }

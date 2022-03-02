@@ -4,6 +4,23 @@
                 font-size: 12px;font-weight: 700;
                 min-width: 100%;
             }
+
+            .adm-list-item{
+                display: flex;
+            }
+
+            .adm-list-item-content{
+                flex: 1;
+            }
+
+            .adm-list-item-content-main{
+                display: flex;
+            }
+
+            .adm-input{
+                flex: 1;
+                margin-left: 10px;
+            }
         }
 
 }

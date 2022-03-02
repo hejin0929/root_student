@@ -18,9 +18,7 @@ const MyForm: FC<{
   const { list, submitTxt = "确认" } = _props;
 
   const store: MyFormStore = useStore(MyFormStore, list);
-
-  const { data } = store;
-
+  
   return (
     <div className={CssStyle.formMain}>
       <Form onFinish={(value) => store.handleSubmit(value)}>
