@@ -18,17 +18,21 @@ export const useStore = (
       callback,
       params,
     });
-
     return data;
   }
   useRouter(storeMap.methodsStore);
+  if (storeMap.aHook.get(store)) {
+    storeMap.watchLook.get(store)?.subscribe("init", params);
+    storeMap.aHook.delete(store);
+  }
+
+  // 因为数据结构只能回调传参
 
   return storeMap.get(store);
 };
 
 export const unStore = (store: any) => {
   const stores = useContext(ContextStore);
-
   return stores.unStore(store);
 };
 
@@ -71,7 +75,7 @@ export class CreateStore {
         routers: this.methodsStore,
         params: callback?.params,
       });
-      this.aHook.delete(store)
+      this.aHook.delete(store);
     }
 
     this.watchLook.set(store, this.createWatchQueue());
@@ -101,7 +105,7 @@ export class CreateStore {
         if (store) {
           if (!this.watchLook.get(store)) {
             useStore(store);
-            this.aHook.set(store, store);
+            this.aHook.set(store, this.aHook.size + 1);
           }
 
           return this.watchLook.get(store)?.callbackMap.set(name, callback);

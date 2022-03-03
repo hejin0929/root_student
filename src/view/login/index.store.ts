@@ -28,22 +28,6 @@ export default class LoginStore {
   oldPhone: string[] | undefined = [];
   pageStyleType: PageStyle = 1;
 
-  get pageStatic() {
-    return [
-      {
-        name: "手机:",
-        value: "phone",
-      },
-      {
-        name: "密码:",
-        value: "password",
-      },
-      {
-        name: "验证码:",
-        value: "code",
-      },
-    ];
-  }
   // 获取登陆以及注册表格的验证
   get pageFormLogin(): FormItems[] {
     return [
@@ -96,9 +80,13 @@ export default class LoginStore {
 
   get viewTitleText() {
     return classNames({
-      ["欢迎登陆"]: this.pageStyleType === 1 || this.pageStyleType === 2,
-      ["注册用户"]: this.pageStyleType === 3,
+      ["LOGIN"]: this.pageStyleType === 1 || this.pageStyleType === 2,
+      ["NEW USERS"]: this.pageStyleType === 3,
     });
+  }
+
+  get viewTitleLeftText () {
+    return ""
   }
 
   $$: Look | undefined;
