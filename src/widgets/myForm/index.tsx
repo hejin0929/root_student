@@ -15,12 +15,9 @@ const MyForm: FC<{
   onSubmit?: (data: any) => void;
   submitTxt?: string;
 }> = (_props) => {
-  const { list, submitTxt = "确认" } = _props;
-  console.log("???? list", list);
+  const { list, submitTxt = "确认", onSubmit } = _props;
 
-  const store: MyFormStore = useStore(MyFormStore, list);
-
-  const { data } = store;
+  const store: MyFormStore = useStore(MyFormStore, { onSubmit, list });
 
   return (
     <div className={CssStyle.formMain}>

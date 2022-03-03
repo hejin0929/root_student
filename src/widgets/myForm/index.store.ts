@@ -15,7 +15,7 @@ export type MyFormTypes = {
   showPassWord?: boolean;
   datePickerTypes?: string;
   placeholder?: string;
-  rules?: {required?: boolean; message: string}[]
+  rules?: { required?: boolean; message: string }[];
 };
 
 export enum FormItemTypes {
@@ -29,26 +29,38 @@ export enum FormItemTypes {
 }
 
 export class MyFormStore {
-  data: any = {};
 
   events: Look | undefined;
 
-  constructor({ params, events }: { params: MyFormTypes[]; events: Look }) {
-    const data = {};
+  call: ((data: any) => void | undefined) | undefined;
+
+  constructor({
+    params,
+    events,
+  }: {
+    params: { list: MyFormTypes[]; onSubmit: (data: any) => void };
+    events: Look;
+  }) {
+
+    // params.list?.forEach((v) => Object.assign(data, { [v.value]: undefined }));
+    console.log("this is a ?? ", params);
+    
 
 
-    params?.forEach((v) => Object.assign(data, { [v.value]: undefined }));
 
-    this.updateData({ data, events });
+    this.updateData({ events, call: params?.onSubmit });
 
     makeAutoObservable(this);
   }
 
   // 提交表单触发的函数
   handleSubmit(data: any) {
-    console.log("???");  
+    console.log("this is ?? ", this.call);
     
-    this.events?.subscribe("submit", data)
+    if (this.call) {
+      this.call?.(data)
+    }
+    this.events?.subscribe("submit", data);
   }
 
   updateData(params: Partial<MyFormStore>) {

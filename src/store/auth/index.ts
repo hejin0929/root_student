@@ -82,7 +82,7 @@ export class CreateStore {
       store,
       new store({
         events: this.watchLook.get(store),
-        routers: this.methodsStore,
+        routers: this.methodsStore, 
         params: callback?.params,
       } as Ages)
     );
