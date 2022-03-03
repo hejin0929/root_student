@@ -4,7 +4,6 @@ import { Look } from "@/store/auth";
 import classNames from "classnames";
 import { Toast } from "antd-mobile";
 import { MyFormTypes, FormItemTypes } from "@widgets/myForm/index.store";
-import { MyFormStore } from "@widgets/myForm/index.store";
 
 enum PageStyle {
   PASSWORD_LOGIN = 1, // 密码登陆
@@ -97,12 +96,6 @@ export default class LoginStore {
     // $$ 由于改造计划 已变成 { events: {}, router } ...
     this.$$ = $$;
     makeAutoObservable(this);
-    // console.log("???", $$);
-
-    this.$$.on("submit", (data) => {
-      console.log("this is ?? ", data);
-      
-    }, MyFormStore) // MyFormStore 表单提交的触发函数
 
     this.$$.on("password", (data) => {
       if (data.length > 5) {
@@ -184,6 +177,12 @@ export default class LoginStore {
     } else if (this.viewText === "确认密码") {
       return this.handleAddUser();
     }
+  }
+
+  // 点击表单提交触发的函数
+  handleOnSubmit(data: any) {
+    console.log("this is submit ?? ", data);
+    
   }
 
   UpdateData(params: Partial<LoginStore>) {

@@ -29,38 +29,33 @@ export enum FormItemTypes {
 }
 
 export class MyFormStore {
-
   events: Look | undefined;
 
   call: ((data: any) => void | undefined) | undefined;
 
-  constructor({
-    params,
-    events,
-  }: {
-    params: { list: MyFormTypes[]; onSubmit: (data: any) => void };
-    events: Look;
-  }) {
+  constructor({ events }: { events: Look }) {
+    events.on(
+      "init",
+      (params: { list: MyFormTypes[]; onSubmit: (data: any) => void }) => {
+        console.log("this is params ?", params);
+        
+        this.updateData({ call: params.onSubmit });
+      }
+    );
 
-    // params.list?.forEach((v) => Object.assign(data, { [v.value]: undefined }));
-    console.log("this is a ?? ", params);
-    
-
-
-
-    this.updateData({ events, call: params?.onSubmit });
+    this.updateData({ events });
 
     makeAutoObservable(this);
   }
 
   // 提交表单触发的函数
   handleSubmit(data: any) {
-    console.log("this is ?? ", this.call);
-    
+    console.log("this is a ?? "), this.call;
     if (this.call) {
-      this.call?.(data)
+      console.log("this is a ?? ");
+      
+      this.call?.(data);
     }
-    this.events?.subscribe("submit", data);
   }
 
   updateData(params: Partial<MyFormStore>) {

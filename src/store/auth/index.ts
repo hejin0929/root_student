@@ -86,10 +86,11 @@ export class CreateStore {
       store,
       new store({
         events: this.watchLook.get(store),
-        routers: this.methodsStore, 
-        params: callback?.params,
+        routers: this.methodsStore,
       } as Ages)
     );
+    // 所有class类的数据都是用init订阅者模式通知
+    this.watchLook.get(store)?.subscribe("init", callback?.params);
     return this.get(store);
   }
 

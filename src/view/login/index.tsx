@@ -19,7 +19,7 @@ const Login: FC = () => {
       <div className={StyleCss.formMains}> 
         <MyForm
           list={store.pageFormLogin}
-          onSubmit={(data: any) => {}}
+          onSubmit={(data: any) => store.handleOnSubmit(data)}
           submitTxt={store.viewText}
         />
       </div>
