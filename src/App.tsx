@@ -9,9 +9,9 @@ function App() {
     <div>
       <Suspense fallback={<GloBalLoading />}>
         <HashRouter>
-            <RenderContext>
-              <RouterBase />
-            </RenderContext>
+          <RenderContext>
+            <RouterBase />
+          </RenderContext>
         </HashRouter>
       </Suspense>
     </div>

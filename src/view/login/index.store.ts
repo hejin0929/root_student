@@ -2,10 +2,11 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { callApi, callApiNotLogin } from "@/api/apiCall";
 import { Look } from "@/store/auth";
 import classNames from "classnames";
-import { Toast } from "antd-mobile";
+// import { Toast } from "antd-mobile";
 import { MyFormTypes, FormItemTypes } from "@widgets/myForm/index.store";
+import { language } from "@/config/language";
 
-enum PageStyle {
+export enum PageStyle {
   PASSWORD_LOGIN = 1, // 密码登陆
   CODE_LOGIN, // 验证码登陆
   ADD_USER, // 注册
@@ -27,46 +28,48 @@ export default class LoginStore {
   oldPhone: string[] | undefined = [];
   pageStyleType: PageStyle = 1;
 
+  formList = [
+    {
+      name: "手机:",
+      value: "phone",
+      isShow: true,
+      rules: [
+        {
+          required: true,
+          message: "请输入手机号码!!!",
+        },
+      ],
+      type: FormItemTypes.INPUT,
+    },
+    {
+      name: "密码:",
+      value: "password",
+      isShow: true,
+      rules: [
+        {
+          required: true,
+          message: "请输入密码!!!",
+        },
+      ],
+      type: FormItemTypes.PASSWORD,
+    },
+    {
+      name: "验证码:",
+      value: "code",
+      isShow: false,
+      rules: [
+        {
+          required: true,
+          message: "请输入验证码!!!",
+        },
+      ],
+      type: FormItemTypes.INPUT,
+    },
+  ];
+
   // 获取登陆以及注册表格的验证
   get pageFormLogin(): FormItems[] {
-    return [
-      {
-        name: "手机:",
-        value: "phone",
-        isShow: true,
-        rules: [
-          {
-            required: true,
-            message: "请输入手机号码!!!",
-          },
-        ],
-        type: FormItemTypes.INPUT
-      },
-      {
-        name: "密码:",
-        value: "password",
-        isShow: true,
-        rules: [
-          {
-            required: true,
-            message: "请输入密码!!!",
-          },
-        ],
-        type: FormItemTypes.PASSWORD
-      },
-      {
-        name: "验证码:",
-        value: "code",
-        isShow: true,
-        rules: [
-          {
-            required: true,
-            message: "请输入验证码!!!",
-          },
-        ],
-        type: FormItemTypes.INPUT
-      },
-    ];
+    return this.formList.filter((v) => v.isShow);
   }
 
   get viewText() {
@@ -79,13 +82,27 @@ export default class LoginStore {
 
   get viewTitleText() {
     return classNames({
-      ["LOGIN"]: this.pageStyleType === 1 || this.pageStyleType === 2,
-      ["NEW USERS"]: this.pageStyleType === 3,
+      [language.names.logo]:
+        this.pageStyleType === 1 || this.pageStyleType === 2,
+      [language.names.user]: this.pageStyleType === 3,
     });
   }
 
-  get viewTitleLeftText () {
-    return ""
+  get viewTitleLeftText() {
+    return classNames({
+      [language.names.newUser]:
+        this.pageStyleType === 1 || this.pageStyleType === 2,
+      [language.names.login]: this.pageStyleType === 3,
+    });
+  }
+
+  get viewLoginType() {
+    return classNames({
+      [language.names.codeLogin]:
+        this.pageStyleType === PageStyle.PASSWORD_LOGIN,
+      [language.names.passwordLogin]:
+        this.pageStyleType === PageStyle.CODE_LOGIN,
+    });
   }
 
   $$: Look | undefined;
@@ -122,20 +139,6 @@ export default class LoginStore {
     });
   }
 
-  handleTest() {
-    callApiNotLogin("/login/user/sign", {
-      method: "post",
-      reqData: {
-        phone: this.phone || "",
-        code: this.code,
-        password: "123456",
-      },
-      params: undefined,
-    }).then((res) => {
-      // res.body
-    });
-  }
-
   handleGetCode() {
     if (this.times) {
       clearTimeout(this.times);
@@ -158,17 +161,17 @@ export default class LoginStore {
   }
 
   handleAddUser() {
-    callApiNotLogin("/login/user/sign", {
-      params: undefined,
-      method: "post",
-      reqData: {
-        phone: this.phone || "",
-        code: this.code || "",
-        password: this.password,
-      },
-    }).then((res) => {
-      Toast.show({ content: "注册成功" });
-    });
+    // callApiNotLogin("/login/user/sign", {
+    //   params: undefined,
+    //   method: "post",
+    //   reqData: {
+    //     phone: this.phone || "",
+    //     code: this.code || "",
+    //     password: this.password,
+    //   },
+    // }).then((res) => {
+    //   Toast.show({ content: "注册成功" });
+    // });
   }
 
   handleClickBottom() {
@@ -182,7 +185,22 @@ export default class LoginStore {
   // 点击表单提交触发的函数
   handleOnSubmit(data: any) {
     console.log("this is submit ?? ", data);
-    
+  }
+
+  // 页面右上角点击时间
+  handleUpdateStyleType(types: PageStyle) {
+    this.formList.forEach((v) => (v.isShow = true));
+    switch (types) {
+      case PageStyle.PASSWORD_LOGIN:
+        this.formList[2].isShow = false;
+        break;
+      case PageStyle.CODE_LOGIN:
+        this.formList[1].isShow = false;
+        break;
+      default:
+        break;
+    }
+    this.UpdateData({ pageStyleType: types });
   }
 
   UpdateData(params: Partial<LoginStore>) {

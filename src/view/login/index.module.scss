@@ -1,31 +1,46 @@
-.SignBox{
-    margin: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+.SignBox {
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 
-    .signTitle{
-        text-align: center;
-        font-size: 30px;
-        width: 90vw;
-        .textRight{
-            font-size: 12px;
-            float: right;
-            color: #57c038;
-        }
+  .signTitle {
+    text-align: center;
+    font-size: 30px;
+    width: 90vw;
+    position: relative;
+    .textRight {
+      font-size: 12px;
+      position: absolute;
+      right: 0;
+      color: #57c038;
     }
 
-    .loginImg{
-        margin-bottom: 20px;
-
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        overflow: hidden;
+    .language {
+      font-size: 12px;
+      position: absolute;
+      left: 0;
+      color: #ccc;
     }
+  }
 
-    .formMains{
-        width: 90vw;
-    }
+  .loginImg {
+    margin-bottom: 20px;
+
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .formMains {
+    width: 90vw;
+  }
+
+  .loginType{
+    text-align: center;
+    margin-top: 10px;
+    color: #e67d27;
+  }
 }
