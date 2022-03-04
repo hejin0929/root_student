@@ -2,12 +2,10 @@ const fs = require("fs");
 const path = require("path");
 const parse = require("swagger-parser");
 const beautify = require("js-beautify").js_beautify;
-const swaggerUrl = "http://localhost:8888/swagger/doc.json";
+const swaggerUrl = "http://localhost:8081/swagger/doc.json";
 
 // api接口方法存放目录
 const API_PATH = path.resolve(__dirname, "../../api/type");
-
-console.log("this is", API_PATH);
 
 const TypeData = new Map();
 const PathMap = new Map();
@@ -21,7 +19,7 @@ const isExist = (lastPath = "") => {
       if (err && err.code === "ENOENT") {
         fs.writeFileSync(
           `${API_PATH}/config.ts`,
-          "export const ip = 'http://localhost:8888/swagger/doc.json'"
+          "export const ip = 'http://localhost:8081/swagger/doc.json'"
         );
       }
     });
@@ -92,7 +90,6 @@ const gen = async () => {
         const valueData = parsed.paths;
         const data = { ParamsData: {} };
 
-        // console.log("this is path ?? ", path);
         data.type = "get";
         if (valueData[path].get.parameters[0].in === "body") {
           if (valueData[path].post.parameters[0].schema.type === "array") {
@@ -115,8 +112,7 @@ const gen = async () => {
             data.ParamsData[element.name] = element.type;
           });
 
-          data.reqData = undefined
-        
+          data.reqData = undefined;
         }
 
         if (valueData[path].get?.responses["200"].schema.type === "array") {
@@ -140,7 +136,7 @@ const gen = async () => {
     // console.log("this is ?? Map", PathMap, TypeData);
     WriteFileApi();
   } catch (e) {
-    console.log(e);
+    console.log("this is err", e);
   }
 };
 
@@ -186,8 +182,21 @@ const WriteFileApi = () => {
 
       return `\ninterface ${v}{${keys
         .map((v) => {
+
           if (paramsData[v] === "integer") {
             paramsData[v] = "number";
+          }
+          
+          if ( typeof paramsData[v] === "object") {
+            return `${v}: { ${Object.keys(paramsData[v])
+              .map((vv) => {
+                if (vv === "required") {
+                  return;
+                }
+
+                return `${vv}: ${paramsData[v][vv]}\n`;
+              })
+              .join(";")} }`;
           }
           if (isMust?.indexOf(v) !== -1) {
             return `${v}: ${paramsData[v]}`;
@@ -206,27 +215,33 @@ const WriteFileApi = () => {
 
       const keys = Object.keys(PathMap.get(v));
 
-      return `"${v}": {${keys.map((v) => {
-        if (v === "type") {
-          return `${v}: "${data[v]}"`;
-        }
-        if(v === "ParamsData"){
-          if(Object.keys(data[v]).length){
-            return "ParamsData?:{" + Object.keys(data[v]).map(vv => {
-              console.log(data[v], vv)
-              return `${vv}: ${data[v][vv]}`
-            }) + "}"
+      return `"${v}": {${keys
+        .map((v) => {
+          if (v === "type") {
+            return `${v}: "${data[v]}"`;
+          }
+          if (v === "ParamsData") {
+            if (Object.keys(data[v]).length) {
+              return (
+                "ParamsData?:{" +
+                Object.keys(data[v]).map((vv) => {
+                  console.log(data[v], vv);
+                  return `${vv}: ${data[v][vv]}`;
+                }) +
+                "}"
+              );
+            }
+
+            return `${v}?: undefined`;
           }
 
-          return `${v}?: undefined`
-        }
-
-
-        return `${v}: ${data[v]}`;
-      }).join(";\n")}}\n`;
+          return `${v}: ${data[v]}`;
+        })
+        .join(";\n")}}\n`;
     })
     .join(";")}}
   `;
+
   fs.writeFileSync(
     `${API_PATH}/config.ts`,
     beautify(template, { indent_size: 2, max_preserve_newlines: 2 })

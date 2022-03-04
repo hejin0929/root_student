@@ -12,11 +12,14 @@ const Login: FC = () => {
 
   return (
     <div className={StyleCss.SignBox}>
-      <h2 className={StyleCss.signTitle}>{store.viewTitleText} <span className={StyleCss.textRight}>new user</span></h2>
+      <h2 className={StyleCss.signTitle}>
+        {store.viewTitleText}{" "}
+        <span className={StyleCss.textRight}>new user</span>
+      </h2>
       <div className={StyleCss.loginImg}>
         <Image url={login} />
       </div>
-      <div className={StyleCss.formMains}> 
+      <div className={StyleCss.formMains}>
         <MyForm
           list={store.pageFormLogin}
           onSubmit={(data: any) => store.handleOnSubmit(data)}

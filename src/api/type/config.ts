@@ -1,38 +1,19 @@
-interface loginGetPhoneCode {
-  code: string
-}
 interface loginRepsGetCode {
-  body ? : loginGetPhoneCode;
+  body: {
+    code: string;
+  };
   mgsCode: number;
   mgsText: string
 }
-interface loginUser {
-  id: string;
-  name: string;
-  token: string
-}
 interface loginUserBody {
-  body ? : loginUser;
+  body: {
+    id: string;name: string;token: string;
+  };
   mgsCode: number;
   mgsText: string
 }
 interface loginUserCode {
   code: string;
-  phone: string;
-  testData ? : loginUserName
-}
-interface loginUserName {
-  password: string;
-  phone: string
-}
-interface loginUserSignReps {
-  body ? : string;
-  mgsCode: number;
-  mgsText: string
-}
-interface loginUserSignType {
-  code: string;
-  password: string;
   phone: string
 }
 
@@ -42,12 +23,6 @@ export interface Paths {
     type: "post";
     reqData: loginUserCode;
     resData: loginUserBody
-  };
-  "/login/user/sign": {
-    ParamsData ? : undefined;
-    type: "post";
-    reqData: loginUserSignType;
-    resData: loginUserSignReps
   };
   "/login/user/{phone}": {
     ParamsData ? : {

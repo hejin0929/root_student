@@ -29,7 +29,6 @@ export class Routers {
   }
 
   navigate(path: string) {
-    console.log("path ?? ", path);
     
     this.updateData({ path });
   }

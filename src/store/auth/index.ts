@@ -21,6 +21,8 @@ export const useStore = (
     return data;
   }
   useRouter(storeMap.methodsStore);
+
+  // 只会触发一次的init传参
   if (storeMap.aHook.get(store)) {
     storeMap.watchLook.get(store)?.subscribe("init", params);
     storeMap.aHook.delete(store);
