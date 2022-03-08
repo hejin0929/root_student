@@ -10,6 +10,7 @@ export enum PageStyle {
   PASSWORD_LOGIN = 1, // 密码登陆
   CODE_LOGIN, // 验证码登陆
   ADD_USER, // 注册
+  GET_CODE,
 }
 
 interface FormItems extends MyFormTypes {
@@ -18,9 +19,6 @@ interface FormItems extends MyFormTypes {
 
 export default class LoginStore {
   // 用户账户输入
-  phone: string | undefined;
-  code: string = "";
-  password: string = "";
   isCode: boolean = false;
   isPassword: boolean = false;
   count: number | undefined;
@@ -28,7 +26,7 @@ export default class LoginStore {
   oldPhone: string[] | undefined = [];
   pageStyleType: PageStyle = 1;
 
-  formList = [
+  formList: FormItems[] = [
     {
       name: "手机:",
       value: "phone",
@@ -37,6 +35,18 @@ export default class LoginStore {
         {
           required: true,
           message: "请输入手机号码!!!",
+        },
+      ],
+      type: FormItemTypes.INPUT,
+    },
+    {
+      name: "验证码:",
+      value: "code",
+      isShow: false,
+      rules: [
+        {
+          required: true,
+          message: "请输入验证码!!!",
         },
       ],
       type: FormItemTypes.INPUT,
@@ -52,18 +62,6 @@ export default class LoginStore {
         },
       ],
       type: FormItemTypes.PASSWORD,
-    },
-    {
-      name: "验证码:",
-      value: "code",
-      isShow: false,
-      rules: [
-        {
-          required: true,
-          message: "请输入验证码!!!",
-        },
-      ],
-      type: FormItemTypes.INPUT,
     },
   ];
 
@@ -139,17 +137,23 @@ export default class LoginStore {
     });
   }
 
-  handleGetCode() {
+  handleGetCode(phone: string) {
     if (this.times) {
       clearTimeout(this.times);
     }
 
     callApiNotLogin("/login/user/{phone}", {
-      params: { phone: this.phone || "" },
+      params: { phone: phone || "" },
       method: "get",
       reqData: undefined,
     }).then((res) => {
-      this.UpdateData({ code: res?.code ?? "", isCode: true, count: 60 });
+      this.formList.forEach((v) => {
+        if (v.value === "code") {
+          v.default = res.code;
+        }
+      });
+      this.UpdateData({ isCode: true, count: 60 });
+
       this.times = setInterval(() => {
         this.UpdateData({ count: this.count && this.count - 1 });
         if (this.count === 0 && this.times) {
@@ -174,13 +178,13 @@ export default class LoginStore {
     // });
   }
 
-  handleClickBottom() {
-    if (this.viewText === "获取验证码") {
-      return this.handleGetCode();
-    } else if (this.viewText === "确认密码") {
-      return this.handleAddUser();
-    }
-  }
+  // handleClickBottom() {
+  //   if (this.viewText === "获取验证码") {
+  //     return this.handleGetCode();
+  //   } else if (this.viewText === "确认密码") {
+  //     return this.handleAddUser();
+  //   }
+  // }
 
   // 点击表单提交触发的函数
   handleOnSubmit(data: any) {
@@ -196,6 +200,10 @@ export default class LoginStore {
         break;
       case PageStyle.CODE_LOGIN:
         this.formList[1].isShow = false;
+        break;
+      case PageStyle.GET_CODE:
+        this.formList[1].isShow = false;
+        this.formList[2].isShow = false;
         break;
       default:
         break;
