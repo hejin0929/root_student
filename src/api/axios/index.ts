@@ -3,8 +3,6 @@ export const AxiosRequest = (data: AxiosRequestConfig): any => {
   const requset = axios.create(data);
 
   requset.interceptors.request.use((config) => {
-    console.log(config);
-
     if (config.url?.indexOf("login") != -1) {
       return config;
     }

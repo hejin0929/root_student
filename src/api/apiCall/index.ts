@@ -1,26 +1,34 @@
 import { Paths } from "../type/config";
 import { AxiosRequest } from "../axios";
 import { Toast } from "antd-mobile";
+import { AxiosRequestConfig } from "axios";
 
 export async function callApi<
   T extends keyof Paths,
   P extends Paths[T]["ParamsData"],
   Q extends Paths[T]["reqData"]
->(url: T, data: { params: P; reqData: Q; method: Paths[T]["type"] }) {
+>(
+  url: T,
+  data: { params: P; reqData: Q; method: Paths[T]["type"] },
+  headers?: AxiosRequestConfig["headers"]
+) {
   return new Promise<Paths[T]["resData"]["body"]>((resolve, reject) => {
     if (localStorage.getItem("token")) {
       return reject(new Error("error !!!"));
     }
 
+    const headerData = Object.assign(
+      { ["Authorization"]: localStorage.getItem("token") || "" },
+      headers
+    );
+
     AxiosRequest({
-      baseURL: "http://localhost:8888/",
+      baseURL: "http://localhost:8081/",
       url,
       params: data.params,
       data: data.reqData,
       method: data.method,
-      headers: {
-        ["Authorization"]: localStorage.getItem("token") || "",
-      },
+      headers: headerData,
     })
       .then((res: any) => {
         if (res.mgsCode === 200) {
@@ -41,14 +49,19 @@ export async function callApiNotLogin<
   T extends keyof Paths,
   P extends Paths[T]["ParamsData"],
   Q extends Paths[T]["reqData"]
->(url: T, data: { params: P; reqData: Q; method: Paths[T]["type"] }) {
+>(
+  url: T,
+  data: { params: P; reqData: Q; method: Paths[T]["type"] },
+  headers?: AxiosRequestConfig["headers"]
+) {
   return new Promise<Paths[T]["resData"]["body"]>((resolve, reject) => {
     AxiosRequest({
-      baseURL: "http://localhost:8888/",
+      baseURL: "http://localhost:8081/",
       url,
       params: data.params,
       data: data.reqData,
       method: data.method,
+      headers: headers || undefined,
     })
       .then((res: any) => {
         if (res.mgsCode === 200) {

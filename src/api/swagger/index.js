@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const parse = require("swagger-parser");
 const beautify = require("js-beautify").js_beautify;
-const swaggerUrl = "http://localhost:8081/swagger/doc.json";
+const swaggerUrl = "http://localhost:8081/api/swagger/doc.json";
 
 // api接口方法存放目录
 const API_PATH = path.resolve(__dirname, "../../api/type");
@@ -19,7 +19,7 @@ const isExist = (lastPath = "") => {
       if (err && err.code === "ENOENT") {
         fs.writeFileSync(
           `${API_PATH}/config.ts`,
-          "export const ip = 'http://localhost:8081/swagger/doc.json'"
+          "export const ip = 'http://localhost:8081/api/swagger/doc.json'"
         );
       }
     });
@@ -225,8 +225,14 @@ const WriteFileApi = () => {
               return (
                 "ParamsData?:{" +
                 Object.keys(data[v]).map((vv) => {
-                  console.log(data[v], vv);
-                  return `${vv}: ${data[v][vv]}`;
+                  // console.log(data[v], vv);
+                  let types = data[v][vv];
+
+                  if(types === "file"){
+                    types = "File"
+                  }
+
+                  return `${vv}: ${types}`;
                 }) +
                 "}"
               );
