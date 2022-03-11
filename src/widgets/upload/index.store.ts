@@ -26,39 +26,24 @@ class UploadStore {
 
       const request = axios.create({
         headers: {
-        //   "Content-Type": "multipart/form-data",
           "Content-Type": "application/json",
-        //   "Access-Control-Allow-Origin": "*",
         },
-        baseURL: "http://localhost:8081",
+        baseURL: "http://localhost:3001",
         withCredentials: true,
       });
 
-      request.post("/api/upload/images", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        //   "Access-Control-Allow-Origin": "*",
-        },
-        baseURL: "http://localhost:8081",
-        withCredentials: true,
-      }).then(res => {
-          console.log(res);
-          
-      });
+      request.defaults.withCredentials = true;
 
-      //   callApiNotLogin(
-      //     "/api/upload/images",
-      //     {
-      //       params: {
-      //         image: files as any,
-      //       },
-      //       reqData: undefined,
-      //       method: "post",
-      //     },
-      //     { ["Content-Type"]: "multipart/form-data" }
-      //   );
-
-      this.updateData({ images: this.images?.concat(reader.result) });
+      request
+        .post("/api/upload/images", formData)
+        .then(({ data }) => {
+          if (data.mgsCode === 200) {
+            this.updateData({ images: this.images?.concat(reader.result) });
+          }
+        })
+        .catch((err) => {
+          console.log("err is a", err);
+        });
     };
   }
 

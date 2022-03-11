@@ -10,7 +10,7 @@ const Upload: FC = observer(() => {
 
   return (
     <div className={StyleCss.upload}>
-      <ul>
+      <ul className={StyleCss.list}>
         {store.images?.map((v, i) => {
           return (
             <li key={i}>
