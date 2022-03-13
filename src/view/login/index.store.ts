@@ -142,26 +142,26 @@ export default class LoginStore {
       clearTimeout(this.times);
     }
 
-    callApiNotLogin("/login/user/{phone}", {
-      params: { phone: phone || "" },
-      method: "get",
-      reqData: undefined,
-    }).then((res) => {
-      this.formList.forEach((v) => {
-        if (v.value === "code") {
-          v.default = res.code;
-        }
-      });
-      this.UpdateData({ isCode: true, count: 60 });
+    // callApiNotLogin("/login/user/{phone}", {
+    //   params: { phone: phone || "" },
+    //   method: "get",
+    //   reqData: undefined,
+    // }).then((res) => {
+    //   this.formList.forEach((v) => {
+    //     if (v.value === "code") {
+    //       v.default = res.code;
+    //     }
+    //   });
+    //   this.UpdateData({ isCode: true, count: 60 });
 
-      this.times = setInterval(() => {
-        this.UpdateData({ count: this.count && this.count - 1 });
-        if (this.count === 0 && this.times) {
-          this.UpdateData({ isCode: false });
-          clearTimeout(this.times);
-        }
-      }, 1000);
-    });
+    //   this.times = setInterval(() => {
+    //     this.UpdateData({ count: this.count && this.count - 1 });
+    //     if (this.count === 0 && this.times) {
+    //       this.UpdateData({ isCode: false });
+    //       clearTimeout(this.times);
+    //     }
+    //   }, 1000);
+    // });
   }
 
   handleAddUser() {
