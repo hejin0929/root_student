@@ -1,4 +1,4 @@
 *.zip   过滤zip后缀文件
 demo.html   过滤该文件
 # 过滤node包管理
-# node_modules 
+node_modules 
