@@ -5,8 +5,11 @@ import { makeAutoObservable, runInAction } from "mobx";
 class UploadStore {
   images: (string | ArrayBuffer | null)[] | undefined;
 
+  videos: string[] | undefined;
+
   constructor() {
     this.images = [];
+    this.videos = [];
     makeAutoObservable(this);
   }
 
@@ -39,6 +42,41 @@ class UploadStore {
         .then(({ data }) => {
           if (data.mgsCode === 200) {
             this.updateData({ images: this.images?.concat(reader.result) });
+          }
+        })
+        .catch((err) => {
+          console.log("err is a", err);
+        });
+    };
+  }
+
+  handleUploadVideo(event: React.MutableRefObject<HTMLInputElement>) {
+    const data = event.current.files?.[0] as File;
+
+    const reader = new FileReader();
+
+    reader.readAsDataURL(data);
+
+    const formData = new FormData();
+
+    formData.append("videos", data, data.name);
+
+    reader.onload = () => {
+      const request = axios.create({
+        headers: {
+          "Content-Type": "application/json",
+        },
+        baseURL: "http://localhost:3001",
+        withCredentials: true,
+      });
+
+      request.defaults.withCredentials = true;
+
+      request
+        .post("/api/upload/videos", formData)
+        .then(({ data }) => {
+          if (data.mgsCode === 200) {
+            this.updateData({ videos: this.videos?.concat(data.body) });
           }
         })
         .catch((err) => {

@@ -25,17 +25,37 @@ const Upload: FC = observer(() => {
         accept="image"
         onChange={() => store.handleFileChange(refs as any)}
       />
+
+      <UploadVideo />
     </div>
   );
 });
 
-
 const UploadVideo = observer(() => {
-    return <div>
-        
+  const store: UploadStore = useStore(UploadStore);
+  const refs = useRef(null);
+
+  return (
+    <div className={StyleCss.videoBox}>
+      <ul className={StyleCss.list}>
+        {store.videos?.map((v, i) => {
+          console.log(v);
+
+          return (
+            <li key={i}>
+              <video src={v} controls />
+            </li>
+          );
+        })}
+      </ul>
+      <input
+        ref={refs}
+        type="file"
+        accept="video"
+        onChange={() => store.handleUploadVideo(refs as any)}
+      />
     </div>
-})
-
-
+  );
+});
 
 export { Upload };
