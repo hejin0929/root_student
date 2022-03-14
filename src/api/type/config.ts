@@ -72,6 +72,7 @@ export interface Paths {
       image: File
     };
     type: "post";
-    resData: uploadFilesFilesRes
+    resData: uploadFilesFilesRes,
+    reqData: getCodeResCode
   }
 }

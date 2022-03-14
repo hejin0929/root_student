@@ -14,15 +14,15 @@ import { Paths } from "./config";
 //     }
 // });
 
-function callApi<
-  T extends keyof Paths,
-  P extends Paths[T]["ParamsData"],
-  Q extends Paths[T]["reqData"]
->(url: T, data: { params?: P; reqData?: Q; method: Paths[T]["type"] }): Paths[T]["resData"] {
+// function callApi<
+//   T extends keyof Paths,
+//   P extends Paths[T]["ParamsData"],
+//   Q extends Paths[T]["reqData"]
+// >(url: T, data: { params?: P; reqData?: Q; method: Paths[T]["type"] }): Paths[T]["resData"] {
 
     
 
-    return {}
-}
+//     return {}
+// }
 
 // const data = callApi("/login/user/login", { params: undefined, type: "post" });

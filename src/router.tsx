@@ -1,7 +1,7 @@
 import { FC, Suspense } from 'react';
 
 const RootRouter: FC = () => {
-    return <Suspense fallback={}>
+    return <Suspense fallback={null}>
 
     </Suspense>
 }
