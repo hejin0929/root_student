@@ -1,4 +1,6 @@
+import { callApiNotLogin } from "@/api/apiCall";
 import { makeAutoObservable, runInAction } from "mobx";
+import { User } from "../auth/user";
 
 export class WebSocketMessage {
   url: string | undefined;
@@ -7,14 +9,24 @@ export class WebSocketMessage {
   data: string = "";
   status: number = 0;
 
-  constructor(data: { url: string }) {
+  constructor(data: { url: string; user: User }) {
     makeAutoObservable(this);
     this.Update({ url: data.url });
-    this.init();
+    callApiNotLogin("/api/ws" as any, {
+      params: undefined,
+      reqData: undefined,
+      method: "get",
+    }).then((res: any) => {
+      if (res.mgsCode === 200) {
+        this.data = data.user.token || "";
+        this.init();
+      }
+    });
   }
 
   init() {
     this.conn = new WebSocket(this.url || "");
+    this.StepLogin();
   }
 
   StepLogin() {
@@ -31,8 +43,12 @@ export class WebSocketMessage {
     if (!this.conn) {
       return console.error("还未创建socket实列");
     }
-    this.conn.onmessage = (evet) => {
-      console.log("this is a ?? ", evet);
+    this.conn.onmessage = (events) => {
+      const currentTarget = events.currentTarget as WebSocket;
+      this.status = currentTarget.readyState;
+      if (currentTarget.readyState === 1) {
+        this.onSend();
+      }
     };
   }
 

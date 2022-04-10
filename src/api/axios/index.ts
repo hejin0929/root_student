@@ -5,7 +5,8 @@ export const AxiosRequest = (data: AxiosRequestConfig): any => {
   requset.interceptors.request.use((config) => {
     if (
       config.url?.indexOf("login") !== -1 ||
-      config.url.indexOf("phone_code") !== -1
+      config.url.indexOf("phone_code") !== -1 ||
+      config.url.indexOf("ws") !== -1
     ) {
       return config;
     }

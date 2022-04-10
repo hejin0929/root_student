@@ -1,7 +1,8 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { ContextStore } from "@store/index";
 import { Routers, useRouter } from "./router";
 import { Params, useParams } from "react-router-dom";
+import { User } from "./user";
 
 export const useStore = (
   store: any,
@@ -59,8 +60,11 @@ export class CreateStore {
 
   aHook: Map<string, any> = new Map();
 
+  user: User | undefined;
+
   constructor() {
     this.methodsStore = new Routers();
+    this.user = new User();
   }
 
   create(
@@ -75,6 +79,7 @@ export class CreateStore {
       new store({
         events: this.watchLook.get(store),
         routers: this.methodsStore,
+        user: this.user,
         params: callback?.params,
       });
       this.aHook.delete(store);
@@ -89,6 +94,7 @@ export class CreateStore {
       new store({
         events: this.watchLook.get(store),
         routers: this.methodsStore,
+        user: this.user,
       } as Ages)
     );
     // 所有class类的数据都是用init订阅者模式通知

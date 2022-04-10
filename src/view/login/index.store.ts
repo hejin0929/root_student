@@ -2,11 +2,11 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { callApi, callApiNotLogin } from "@/api/apiCall";
 import { Look } from "@/store/auth";
 import classNames from "classnames";
-// import { Toast } from "antd-mobile";
 import { MyFormTypes, FormItemTypes } from "@widgets/myForm/index.store";
 import { language } from "@/config/language";
 import { Toast } from "antd-mobile";
 import { Routers } from "@/store/auth/router";
+import { User } from "@/store/auth/user";
 
 export enum PageStyle {
   PASSWORD_LOGIN = 1, // 密码登陆
@@ -28,6 +28,7 @@ export default class LoginStore {
   oldPhone: string[] | undefined = [];
   pageStyleType: PageStyle = 1;
   router: Routers | undefined;
+  user: User | undefined;
 
   formList: FormItems[] = [
     {
@@ -120,10 +121,19 @@ export default class LoginStore {
 
   test: TestStore | undefined;
 
-  constructor({ events: $$, routers }: { events: Look; routers: Routers }) {
+  constructor({
+    events: $$,
+    routers,
+    user,
+  }: {
+    events: Look;
+    routers: Routers;
+    user: User;
+  }) {
     // $$ 由于改造计划 已变成 { events: {}, router } ...
     this.$$ = $$;
     this.router = routers;
+    this.user = user;
     makeAutoObservable(this);
 
     this.$$.on("password", (data) => {
@@ -227,6 +237,9 @@ export default class LoginStore {
 
     if (res.mgsCode === 200) {
       localStorage.setItem("token", res.body?.token || "");
+      localStorage.setItem("uuid", res.body?.id || "");
+      this.user?.initUpdate();
+
       Toast.show({ content: res.mgsText, icon: "success" });
       return this.router?.navigate("/home/1");
     }
