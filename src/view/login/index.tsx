@@ -28,7 +28,11 @@ const Login: FC = () => {
         <span
           className={StyleCss.textRight}
           onClick={() =>
-            store.handleUpdateStyleType(store.pageStyleType === PageStyle.ADD_USER ? PageStyle.PASSWORD_LOGIN : PageStyle.ADD_USER)
+            store.handleUpdateStyleType(
+              store.pageStyleType === PageStyle.ADD_USER
+                ? PageStyle.PASSWORD_LOGIN
+                : PageStyle.ADD_USER
+            )
           }
         >
           {store.viewTitleLeftText}
@@ -42,8 +46,20 @@ const Login: FC = () => {
           list={store.pageFormLogin}
           onSubmit={(data: any) => store.handleOnSubmit(data)}
           submitTxt={store.viewText}
+          onChange={(data) => {
+            store.handleChange(data as any);
+          }}
         />
-        <div className={StyleCss.loginType} onClick={() => store.handleUpdateStyleType(store.pageStyleType === PageStyle.PASSWORD_LOGIN ? PageStyle.CODE_LOGIN : PageStyle.PASSWORD_LOGIN) }>
+        <div
+          className={StyleCss.loginType}
+          onClick={() =>
+            store.handleUpdateStyleType(
+              store.pageStyleType === PageStyle.PASSWORD_LOGIN
+                ? PageStyle.CODE_LOGIN
+                : PageStyle.PASSWORD_LOGIN
+            )
+          }
+        >
           {store.viewLoginType}
         </div>
       </div>

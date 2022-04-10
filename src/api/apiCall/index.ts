@@ -54,7 +54,7 @@ export async function callApiNotLogin<
   data: { params: P; reqData: Q; method: Paths[T]["type"] },
   headers?: AxiosRequestConfig["headers"]
 ) {
-  return new Promise<Paths[T]["resData"]["body"]>((resolve, reject) => {
+  return new Promise<Paths[T]["resData"]>((resolve, reject) => {
     AxiosRequest({
       baseURL: "http://localhost:8081/",
       url,
@@ -65,7 +65,7 @@ export async function callApiNotLogin<
     })
       .then((res: any) => {
         if (res.mgsCode === 200) {
-          resolve(res.body as Paths[T]["resData"]["body"]);
+          resolve(res as Paths[T]["resData"]);
           return;
         }
 

@@ -14,20 +14,33 @@ const MyForm: FC<{
   list: MyFormTypes[];
   onSubmit?: (data: any) => void;
   submitTxt?: string;
+  onChange?: (data: { [name: string]: string }) => void;
 }> = (_props) => {
-  const { list, submitTxt = "确认", onSubmit } = _props;
+  const { list, submitTxt = "确认", onSubmit, onChange } = _props;
 
   const store: MyFormStore = useStore(MyFormStore, { onSubmit, list });
 
   return (
     <div className={CssStyle.formMain}>
-      <Form onFinish={(value) => store.handleSubmit(value)}>
+      <Form
+        onFinish={(value) => store.handleSubmit(value)}
+        initialValues={(() => {
+          const res: any = {};
+          list.forEach((v) => {
+            res[v.value] = v.default;
+          });
+          return res;
+        })()}
+      >
         {list.map((v) => {
           switch (v.type) {
             case FormItemTypes.INPUT:
               return (
                 <Item v={v} key={v.value}>
-                  <Input placeholder={v.placeholder} />
+                  <Input
+                    placeholder={v.placeholder}
+                    onChange={(event) => onChange?.({ [v.value]: event })}
+                  />
                 </Item>
               );
 

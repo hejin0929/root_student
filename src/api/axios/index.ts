@@ -3,14 +3,17 @@ export const AxiosRequest = (data: AxiosRequestConfig): any => {
   const requset = axios.create(data);
 
   requset.interceptors.request.use((config) => {
-    if (config.url?.indexOf("login") != -1) {
+    if (
+      config.url?.indexOf("login") !== -1 ||
+      config.url.indexOf("phone_code") !== -1
+    ) {
       return config;
     }
     if (localStorage.getItem("token")) {
       return (config.headers = { token: localStorage.getItem("token") || "" });
     }
-
-    return (window.location.href = "#/");
+    window.location.href = "#/";
+    return null;
   });
 
   return new Promise((resolve, reject) => {

@@ -37,8 +37,6 @@ export class MyFormStore {
     events.on(
       "init",
       (params: { list: MyFormTypes[]; onSubmit: (data: any) => void }) => {
-        console.log("this is params ?", params);
-        
         this.updateData({ call: params.onSubmit });
       }
     );
@@ -50,10 +48,7 @@ export class MyFormStore {
 
   // 提交表单触发的函数
   handleSubmit(data: any) {
-    console.log("this is a ?? "), this.call;
     if (this.call) {
-      console.log("this is a ?? ");
-      
       this.call?.(data);
     }
   }
