@@ -4,13 +4,13 @@ import HomeStore from "./index.store";
 // import moduleName from '@/'
 
 export default observer(() => {
-  const store: HomeStore = useStore(HomeStore)
-  console.log("update ?");
-  
+  const store: HomeStore = useStore(HomeStore);
+  console.log("update ?", store.routers);
+
   return (
     <div>
       test {store.routers?.path}
-      <div onClick={() => store.handleClick() }>点我跳到管理页</div>
+      <div onClick={() => store.handleClick()}>点我跳到管理页</div>
     </div>
   );
 });

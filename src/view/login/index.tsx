@@ -28,7 +28,11 @@ const Login: FC = () => {
         <span
           className={StyleCss.textRight}
           onClick={() =>
-            store.handleUpdateStyleType(store.pageStyleType === PageStyle.ADD_USER ? PageStyle.PASSWORD_LOGIN : PageStyle.ADD_USER)
+            store.handleUpdateStyleType(
+              store.pageStyleType === PageStyle.ADD_USER
+                ? PageStyle.PASSWORD_LOGIN
+                : PageStyle.ADD_USER
+            )
           }
         >
           {store.viewTitleLeftText}
@@ -43,10 +47,22 @@ const Login: FC = () => {
           onSubmit={(data: any) => store.handleOnSubmit(data)}
           submitTxt={store.viewText}
         />
-        <div className={StyleCss.loginType} onClick={() => store.handleUpdateStyleType(store.pageStyleType === PageStyle.PASSWORD_LOGIN ? PageStyle.CODE_LOGIN : PageStyle.PASSWORD_LOGIN) }>
+        <div
+          className={StyleCss.loginType}
+          onClick={() =>
+            store.handleUpdateStyleType(
+              store.pageStyleType === PageStyle.PASSWORD_LOGIN
+                ? PageStyle.CODE_LOGIN
+                : PageStyle.PASSWORD_LOGIN
+            )
+          }
+        >
           {store.viewLoginType}
         </div>
       </div>
+      <a className={StyleCss.IC_Order} href="https://beian.miit.gov.cn/">
+        粤ICP备2021160767号
+      </a>
     </div>
   );
 };
