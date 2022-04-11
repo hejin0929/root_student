@@ -12,7 +12,7 @@ export async function callApi<
   data: { params: P; reqData: Q; method: Paths[T]["type"] },
   headers?: AxiosRequestConfig["headers"]
 ) {
-  return new Promise<Paths[T]["resData"]>((resolve, reject) => {
+  return new Promise<Paths[T]["resData"]["body"]>((resolve, reject) => {
     if (localStorage.getItem("token")) {
       return reject(new Error("error !!!"));
     }
@@ -32,7 +32,7 @@ export async function callApi<
     })
       .then((res: any) => {
         if (res.mgsCode === 200) {
-          resolve(res.body as Paths[T]["resData"]);
+          resolve(res.body as Paths[T]["resData"]["body"]);
           return;
         }
 
@@ -65,7 +65,7 @@ export async function callApiNotLogin<
     })
       .then((res: any) => {
         if (res.mgsCode === 200) {
-          resolve(res.body as Paths[T]["resData"]);
+          resolve(res as Paths[T]["resData"]);
           return;
         }
 

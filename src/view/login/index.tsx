@@ -46,6 +46,9 @@ const Login: FC = () => {
           list={store.pageFormLogin}
           onSubmit={(data: any) => store.handleOnSubmit(data)}
           submitTxt={store.viewText}
+          onChange={(data) => {
+            store.handleChange(data as any);
+          }}
         />
         <div
           className={StyleCss.loginType}

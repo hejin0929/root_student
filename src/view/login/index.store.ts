@@ -2,9 +2,11 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { callApi, callApiNotLogin } from "@/api/apiCall";
 import { Look } from "@/store/auth";
 import classNames from "classnames";
-// import { Toast } from "antd-mobile";
 import { MyFormTypes, FormItemTypes } from "@widgets/myForm/index.store";
 import { language } from "@/config/language";
+import { Toast } from "antd-mobile";
+import { Routers } from "@/store/auth/router";
+import { User } from "@/store/auth/user";
 
 export enum PageStyle {
   PASSWORD_LOGIN = 1, // 密码登陆
@@ -25,6 +27,8 @@ export default class LoginStore {
   times: NodeJS.Timeout | undefined;
   oldPhone: string[] | undefined = [];
   pageStyleType: PageStyle = 1;
+  router: Routers | undefined;
+  user: User | undefined;
 
   formList: FormItems[] = [
     {
@@ -71,10 +75,20 @@ export default class LoginStore {
   }
 
   get viewText() {
+    if (this.pageStyleType === 3) {
+      return classNames({
+        [this.count + "s"]: this.count && !this.isCode,
+        ["获取验证码"]: !this.count,
+        ["确认注册"]: this.isCode,
+      });
+    }
+
     return classNames({
-      [this.count + "s"]: this.count && !this.isPassword,
-      ["获取验证码"]: !this.isCode && !this.count,
-      ["确认密码"]: this.isPassword,
+      [this.count + "s"]: this.count && !this.isCode,
+      ["获取验证码"]:
+        !this.isCode && !this.count && this.viewLoginType === "密码登陆",
+      ["确认登陆"]: !this.count && this.viewLoginType === "验证码登陆",
+      ["确认密码"]: this.isCode,
     });
   }
 
@@ -107,9 +121,19 @@ export default class LoginStore {
 
   test: TestStore | undefined;
 
-  constructor({ events: $$ }: { events: Look }) {
+  constructor({
+    events: $$,
+    routers,
+    user,
+  }: {
+    events: Look;
+    routers: Routers;
+    user: User;
+  }) {
     // $$ 由于改造计划 已变成 { events: {}, router } ...
     this.$$ = $$;
+    this.router = routers;
+    this.user = user;
     makeAutoObservable(this);
 
     this.$$.on("password", (data) => {
@@ -137,45 +161,14 @@ export default class LoginStore {
     });
   }
 
-  handleGetCode(phone: string) {
-    if (this.times) {
-      clearTimeout(this.times);
-    }
-
-    // callApiNotLogin("/login/user/{phone}", {
-    //   params: { phone: phone || "" },
-    //   method: "get",
-    //   reqData: undefined,
-    // }).then((res) => {
-    //   this.formList.forEach((v) => {
-    //     if (v.value === "code") {
-    //       v.default = res.code;
-    //     }
-    //   });
-    //   this.UpdateData({ isCode: true, count: 60 });
-
-    //   this.times = setInterval(() => {
-    //     this.UpdateData({ count: this.count && this.count - 1 });
-    //     if (this.count === 0 && this.times) {
-    //       this.UpdateData({ isCode: false });
-    //       clearTimeout(this.times);
-    //     }
-    //   }, 1000);
-    // });
-  }
-
-  handleAddUser() {
-    // callApiNotLogin("/login/user/sign", {
-    //   params: undefined,
-    //   method: "post",
-    //   reqData: {
-    //     phone: this.phone || "",
-    //     code: this.code || "",
-    //     password: this.password,
-    //   },
-    // }).then((res) => {
-    //   Toast.show({ content: "注册成功" });
-    // });
+  handleAddUser(data: { phone: string; code: string; password: string }) {
+    callApiNotLogin("/api/login/user/sign", {
+      params: undefined,
+      method: "post",
+      reqData: data,
+    }).then((res) => {
+      Toast.show({ content: "注册成功" });
+    });
   }
 
   // handleClickBottom() {
@@ -186,25 +179,103 @@ export default class LoginStore {
   //   }
   // }
 
+  handleChange(data: { code?: string }) {
+    const list = Object.keys(data);
+
+    if (list.indexOf("code") !== -1) {
+      this.UpdateData({
+        isCode: data["code"] === "" ? false : true,
+        formList: this.formList.map((v) => {
+          if (v.value === "password") {
+            v.isShow = data["code"] === "" ? false : true;
+          }
+          return v;
+        }),
+      });
+    }
+  }
+
+  getCode(phone: string) {
+    if (this.times) {
+      clearTimeout(this.times);
+    }
+    callApiNotLogin("/api/phone_code/user/{phone}", {
+      params: { phone: phone || "" },
+      method: "get",
+      reqData: undefined,
+    }).then((res) => {
+      const list = this.formList.map((v) => {
+        const item = { ...v };
+        if (item.value === "code") {
+          item.default = res.body?.code;
+          item.isShow = true;
+        }
+        return { ...item };
+      });
+      this.UpdateData({
+        isCode: true,
+        count: 60,
+        formList: list,
+      });
+
+      this.times = setInterval(() => {
+        this.UpdateData({ count: this.count && this.count - 1 });
+        if (this.count === 0 && this.times) {
+          this.UpdateData({ isCode: false });
+          clearTimeout(this.times);
+        }
+      }, 1000);
+    });
+  }
+
+  async loginUser(data: { phone: string; password: string }) {
+    const res = await callApiNotLogin("/api/login/user/login", {
+      reqData: data,
+      method: "post",
+      params: undefined,
+    });
+
+    if (res.mgsCode === 200) {
+      localStorage.setItem("token", res.body?.token || "");
+      localStorage.setItem("uuid", res.body?.id || "");
+      this.user?.initUpdate();
+
+      Toast.show({ content: res.mgsText, icon: "success" });
+      return this.router?.navigate("/home/1");
+    }
+    return Toast.show({ content: res.mgsText, icon: "fail" });
+  }
+
   // 点击表单提交触发的函数
   handleOnSubmit(data: any) {
-    console.log("this is submit ?? ", data);
+    if (this.pageStyleType === 3 && this.viewText === "获取验证码") {
+      this.getCode(data.phone);
+    } else if (this.viewText === "确认登陆") {
+      return this.loginUser(data);
+    } else if (this.viewText === "确认注册") {
+      this.handleAddUser(data);
+    }
   }
 
   // 页面右上角点击时间
   handleUpdateStyleType(types: PageStyle) {
     this.formList.forEach((v) => (v.isShow = true));
+
     switch (types) {
       case PageStyle.PASSWORD_LOGIN:
-        this.formList[2].isShow = false;
+        this.formList[1].isShow = false;
         break;
       case PageStyle.CODE_LOGIN:
-        this.formList[1].isShow = false;
+        this.formList[2].isShow = false;
+
         break;
       case PageStyle.GET_CODE:
         this.formList[1].isShow = false;
         this.formList[2].isShow = false;
         break;
+      case PageStyle.ADD_USER:
+        this.formList[2].isShow = false;
+        this.formList[1].isShow = false;
       default:
         break;
     }
