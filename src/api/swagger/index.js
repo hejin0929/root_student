@@ -43,7 +43,7 @@ const gen = async () => {
 
     for (const path in parsed.paths) {
       const valueData = parsed.paths;
-      const data = { ParamsData: {} };
+      const data = { ParamsData: {}, reqData: undefined };
 
       // console.log("this is path ?? ", path);
 
@@ -88,7 +88,7 @@ const gen = async () => {
         PathMap.set(path, data);
       } else {
         const valueData = parsed.paths;
-        const data = { ParamsData: {} };
+        const data = { ParamsData: {}, reqData: undefined };
 
         data.type = "get";
         if (valueData[path].get.parameters[0].in === "body") {
@@ -124,7 +124,7 @@ const gen = async () => {
             .join("");
         } else {
           data.resData = valueData[path].get.responses["200"].schema["$ref"]
-            .split("/")[2]
+            ?.split("/")[2]
             .split(".")
             .join("");
         }
@@ -182,11 +182,10 @@ const WriteFileApi = () => {
 
       return `\ninterface ${v}{${keys
         .map((v) => {
-
           if (paramsData[v] === "integer") {
             paramsData[v] = "number";
           }
-          
+
           if ( typeof paramsData[v] === "object") {
             return `${v}: { ${Object.keys(paramsData[v])
               .map((vv) => {
@@ -217,6 +216,7 @@ const WriteFileApi = () => {
 
       return `"${v}": {${keys
         .map((v) => {
+          console.log("this is a ?? ", v)
           if (v === "type") {
             return `${v}: "${data[v]}"`;
           }
@@ -230,6 +230,10 @@ const WriteFileApi = () => {
 
                   if(types === "file"){
                     types = "File"
+                  }
+
+                  if (types === "integer") {
+                    types = "number";
                   }
 
                   return `${vv}: ${types}`;

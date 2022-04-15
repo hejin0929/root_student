@@ -10,6 +10,7 @@
     font-size: 30px;
     width: 90vw;
     position: relative;
+
     .textRight {
       font-size: 12px;
       position: absolute;
@@ -38,9 +39,15 @@
     width: 90vw;
   }
 
-  .loginType{
+  .loginType {
     text-align: center;
     margin-top: 10px;
     color: #e67d27;
+  }
+
+  .IC_Order {
+    position: absolute;
+    bottom: 10px;
+    color: #999;
   }
 }

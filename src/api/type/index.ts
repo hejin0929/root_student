@@ -1,28 +1,13 @@
 import { Paths } from "./config";
 
-// const callApi = (
-//   path: keyof Paths,
-//   reqData: {
-//     params?: Paths[keyof Paths]["ParamsData"];
-//     reqData: Paths[keyof Paths]["reqData"]
-//   }
-// ) => {};
+export type ApiRequstParams<T extends keyof Paths> = T extends keyof Paths
+  ? Paths[T]["ParamsData"]
+  : undefined;
 
-// callApi("/login/user/login", {
-//     reqData: {
+export type ApiRequstResponse<T extends keyof Paths> = T extends keyof Paths
+  ? Paths[T]["resData"]
+  : undefined;
 
-//     }
-// });
-
-// function callApi<
-//   T extends keyof Paths,
-//   P extends Paths[T]["ParamsData"],
-//   Q extends Paths[T]["reqData"]
-// >(url: T, data: { params?: P; reqData?: Q; method: Paths[T]["type"] }): Paths[T]["resData"] {
-
-    
-
-//     return {}
-// }
-
-// const data = callApi("/login/user/login", { params: undefined, type: "post" });
+export type ApiRequstData<T extends keyof Paths> = T extends keyof Paths
+  ? Paths[T]["reqData"]
+  : undefined;

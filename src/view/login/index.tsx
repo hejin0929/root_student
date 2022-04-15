@@ -63,6 +63,9 @@ const Login: FC = () => {
           {store.viewLoginType}
         </div>
       </div>
+      <a className={StyleCss.IC_Order} href="https://beian.miit.gov.cn/">
+        粤ICP备2021160767号
+      </a>
     </div>
   );
 };
