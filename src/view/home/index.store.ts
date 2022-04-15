@@ -23,7 +23,8 @@ class HomeStore {
     this.updateData({ routers, events, user });
     makeAutoObservable(this);
     this.ws = new WebSocketMessage({
-      url: "ws://127.0.0.1:10215/ws",
+      // url: "ws://127.0.0.1:10215/ws",
+      url: "ws://127.0.0.1:8081/api/ws",
       user: this.user!,
     });
   }

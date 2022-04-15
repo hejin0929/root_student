@@ -7,25 +7,36 @@ export class WebSocketMessage {
   conn: WebSocket | undefined;
   loading: boolean = false;
   data: string = "";
+  uuid: string = "";
   status: number = 0;
 
   constructor(data: { url: string; user: User }) {
     makeAutoObservable(this);
     this.Update({ url: data.url });
-    callApiNotLogin("/api/ws" as any, {
-      params: undefined,
-      reqData: undefined,
-      method: "get",
-    }).then((res: any) => {
-      if (res.mgsCode === 200) {
-        this.data = data.user.token || "";
-        this.init();
-      }
-    });
+    this.init();
+    this.data = data.user.token ?? "";
+    this.uuid = data.user.uuid ?? "";
+    // callApiNotLogin("/api/ws" as any, {
+    //   params: undefined,
+    //   reqData: undefined,
+    //   method: "get",
+    // }).then((res: any) => {
+    //   if (res.mgsCode === 200) {
+    //     this.data = data.user.token || "";
+    //     this.init();
+    //   }
+    // });
   }
 
   init() {
     this.conn = new WebSocket(this.url || "");
+    this.conn.onopen = (events) => {
+      if (!this.status) {
+        this.onSend();
+      }
+      const currentTarget = events.currentTarget as WebSocket;
+      this.status = currentTarget.readyState;
+    };
     this.StepLogin();
   }
 
@@ -45,10 +56,12 @@ export class WebSocketMessage {
     }
     this.conn.onmessage = (events) => {
       const currentTarget = events.currentTarget as WebSocket;
+
       this.status = currentTarget.readyState;
-      if (currentTarget.readyState === 1) {
-        this.onSend();
-      }
+
+      // if (currentTarget.readyState === 1) {
+      //   this.onSend();
+      // }
     };
   }
 
@@ -56,7 +69,7 @@ export class WebSocketMessage {
     if (!this.conn) {
       return console.error("还未创建socket实列");
     }
-    this.conn.send(this.data);
+    this.conn.send(JSON.stringify({ token: this.data, user_id: this.uuid }));
   }
 
   onClose() {
