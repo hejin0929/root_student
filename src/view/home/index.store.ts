@@ -10,6 +10,7 @@ class HomeStore {
   events: Look | undefined;
   user: User | undefined;
   ws: WebSocketMessage | undefined;
+  send = "";
 
   constructor({
     events,
@@ -31,6 +32,13 @@ class HomeStore {
 
   handleClick() {
     this.routers?.navigate("/admin");
+  }
+
+  handleSendWsData() {
+    this.ws?.onSend({
+      receive_id: "5f446a0b0c97408daa58ecc3095c3127",
+      message: this.send,
+    });
   }
 
   updateData(params: Partial<HomeStore>): void {

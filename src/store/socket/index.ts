@@ -32,7 +32,7 @@ export class WebSocketMessage {
     this.conn = new WebSocket(this.url || "");
     this.conn.onopen = (events) => {
       if (!this.status) {
-        this.onSend();
+        this.onSend({ token: this.data, user_id: this.uuid });
       }
       const currentTarget = events.currentTarget as WebSocket;
       this.status = currentTarget.readyState;
@@ -65,11 +65,11 @@ export class WebSocketMessage {
     };
   }
 
-  onSend() {
+  onSend(data: { [key: string]: string }) {
     if (!this.conn) {
       return console.error("还未创建socket实列");
     }
-    this.conn.send(JSON.stringify({ token: this.data, user_id: this.uuid }));
+    this.conn.send(JSON.stringify(data));
   }
 
   onClose() {

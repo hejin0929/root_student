@@ -1,3 +1,4 @@
+import { Toast } from "antd-mobile";
 import axios, { AxiosRequestConfig } from "axios";
 export const AxiosRequest = (data: AxiosRequestConfig): any => {
   const requset = axios.create(data);
@@ -15,6 +16,15 @@ export const AxiosRequest = (data: AxiosRequestConfig): any => {
     }
     window.location.href = "#/";
     return null;
+  });
+
+  requset.interceptors.response.use((data) => {
+    if (data.status === 200) {
+      return data;
+    } else {
+      Toast.show({ content: data.statusText, icon: "error" });
+      return {};
+    }
   });
 
   return new Promise((resolve, reject) => {
