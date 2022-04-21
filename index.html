@@ -11,20 +11,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="个人研发项目" />
   </head>
-  <script>
-    var _vwidth = window.screen.width;
-    var _scale = _vwidth / 750;
-    var _meta = document.createElement("meta");
-    _meta.setAttribute("name", "viewport");
-    _meta.setAttribute(
-      "content",
-      " width = device - width , user - scalable = no , initial - scale = " +
-        _scale
-    );
-    document.getElementsByTagName("head")[0].appendChild(_meta);
-  </script>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      (function (doc, win) {
+        var docEl = doc.documentElement,
+          resizeEvt =
+            "orientationchange" in window ? "orientationchange" : "resize",
+          recalc = function () {
+            var clientWidth = docEl.clientWidth;
+
+            if (!clientWidth) return;
+
+            docEl.style.fontSize = 20 * (clientWidth / 375) + "px";
+          };
+
+        if (!doc.addEventListener) return;
+
+        win.addEventListener(resizeEvt, recalc, false);
+
+        doc.addEventListener("DOMContentLoaded", recalc, false);
+      })(document, window);
+    </script>
   </body>
 </html>
