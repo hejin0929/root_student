@@ -8,23 +8,23 @@ export default defineConfig({
   base: "./",
   server: {
     proxy: {
-      '/api': {
-        target: 'http://localhost:8081/',
+      "/api": {
+        target: "http://localhost:8081/",
         // target: 'http://localhost:9200',
         changeOrigin: true,
         rewrite: (path: string) => {
           // console.log('http://ali.testops.top:9199' + path.replace(/^\/api/, ''));
-          return path.replace(/^\/api/, '')
-        }
-      }
-    }
+          return path.replace(/^\/api/, "");
+        },
+      },
+    },
   },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
       "@myPages": path.resolve(__dirname, "src/view"),
       "@store": path.resolve(__dirname, "src/store"),
-      "@widgets": path.resolve(__dirname, "src/widgets")
+      "@widgets": path.resolve(__dirname, "src/widgets"),
     },
   },
 });
