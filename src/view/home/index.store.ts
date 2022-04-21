@@ -11,6 +11,7 @@ class HomeStore {
   user: User | undefined;
   ws: WebSocketMessage | undefined;
   send = "";
+  receive_id = "";
 
   constructor({
     events,
@@ -36,9 +37,13 @@ class HomeStore {
 
   handleSendWsData() {
     this.ws?.onSend({
-      receive_id: "5f446a0b0c97408daa58ecc3095c3127",
+      receive_id: this.receive_id,
       message: this.send,
     });
+  }
+
+  handleAddUser() {
+    this.routers?.navigate("/add_user");
   }
 
   updateData(params: Partial<HomeStore>): void {
