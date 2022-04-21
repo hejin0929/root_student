@@ -10,9 +10,8 @@ const Admin: FC = () => {
 
   return (
     <div className={styleCss.adminPage}>
-      <div className={styleCss.adminMyCenter}>
-        <Upload />
-      </div>
+      <div className={styleCss.HeaderBlock}></div>
+      <div className={styleCss.adminMyCenter}></div>
     </div>
   );
 };
