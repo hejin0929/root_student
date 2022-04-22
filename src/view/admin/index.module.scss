@@ -1,7 +1,32 @@
 .adminPage {
     .HeaderBlock {
-        width: 390px;
-        height: 202px;
+        width: 375px;
+        height: 194px;
         background: linear-gradient(90deg, #4A27FB, #2AACFF);
+
+        .authContext {
+            display: flex;
+            // justify-content: space-between;
+            padding: 64px 0 0 15px;
+            color: #fff;
+            align-items: center;
+
+            .userImg {
+                width: 70px;
+                height: 70px;
+                border-radius: 50%;
+                overflow: hidden;
+            }
+
+            .userMessage {
+                margin-left: 15px;
+
+                .userName {
+                    font-size: 22px;
+                }
+
+                .userPhone {}
+            }
+        }
     }
 }

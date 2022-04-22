@@ -1,124 +1,154 @@
+interface chumResChum {
+  name: string
+}
 interface getCodeGetPhoneCode {
-  code: string;
+  code: string
 }
 interface getCodeResCode {
-  body?: getCodeGetPhoneCode;
+  body ? : getCodeGetPhoneCode;
   mgsCode: number;
-  mgsText: string;
+  mgsText: string
+}
+interface homeUserMessage {
+  birthday: string;
+  image: string;
+  introduce: string;
+  name: string;
+  phone: string;
+  region: string;
+  sex: number;
+  state: number;
+  user_id: string;
+  uuid: string
 }
 interface loginUser {
   id: string;
   name: string;
-  token: string;
+  token: string
 }
 interface loginUserBody {
-  body?: loginUser;
+  body ? : loginUser;
   mgsCode: number;
-  mgsText: string;
+  mgsText: string
 }
 interface loginUserCode {
   code: string;
-  phone: string;
+  phone: string
 }
 interface loginUserName {
   password: string;
-  phone: string;
+  phone: string
 }
 interface loginUserSignReps {
-  body?: string;
+  body ? : string;
   mgsCode: number;
-  mgsText: string;
+  mgsText: string
 }
 interface loginUserSignType {
   code: string;
   password: string;
-  phone: string;
+  phone: string
 }
 interface moduleHttpErrs {
   mgsText: string;
-  msgCode: number;
+  msgCode: number
 }
 interface uploadFilesFileTest {
-  code: string;
+  code: string
 }
 interface uploadFilesFilesRes {
-  body?: string;
+  body ? : string;
   mgsCode: number;
-  mgsText: string;
+  mgsText: string
 }
 
 export interface Paths {
-  "/api/home/message": {
-    ParamsData?: {
-      id: number;
-      Authorization: string;
+  "/api/chum/search/{phone}": {
+    ParamsData ? : {
+      phone: string
     };
     reqData: undefined;
     type: "get";
-    resData: undefined;
+    resData: chumResChum
+  };
+  "/api/home/message": {
+    ParamsData ? : {
+      id: number
+    };
+    reqData: undefined;
+    type: "get";
+    resData: undefined
   };
   "/api/login/user/login": {
-    ParamsData?: undefined;
+    ParamsData ? : undefined;
     reqData: loginUserName;
     type: "post";
-    resData: loginUserBody;
+    resData: loginUserBody
   };
   "/api/login/user/login_code": {
-    ParamsData?: undefined;
+    ParamsData ? : undefined;
     reqData: loginUserCode;
     type: "post";
-    resData: loginUserBody;
+    resData: loginUserBody
   };
   "/api/login/user/sign": {
-    ParamsData?: undefined;
+    ParamsData ? : undefined;
     reqData: loginUserSignType;
     type: "post";
-    resData: loginUserSignReps;
+    resData: loginUserSignReps
   };
   "/api/phone_code/user/{phone}": {
-    ParamsData?: {
-      phone: string;
+    ParamsData ? : {
+      phone: string
     };
     reqData: undefined;
     type: "get";
-    resData: getCodeResCode;
+    resData: getCodeResCode
   };
   "/api/upload/deleteImg": {
-    ParamsData?: {
-      name: string;
+    ParamsData ? : {
+      name: string
     };
     reqData: undefined;
     type: "get";
-    resData: uploadFilesFilesRes;
+    resData: uploadFilesFilesRes
   };
   "/api/upload/deleteVideo": {
-    ParamsData?: {
-      video: string;
+    ParamsData ? : {
+      video: string
     };
     reqData: undefined;
     type: "get";
-    resData: uploadFilesFilesRes;
+    resData: uploadFilesFilesRes
   };
   "/api/upload/images": {
-    ParamsData?: {
-      image: File;
+    ParamsData ? : {
+      image: File
     };
     reqData: undefined;
     type: "post";
-    resData: uploadFilesFilesRes;
+    resData: uploadFilesFilesRes
   };
   "/api/upload/test": {
-    ParamsData?: undefined;
+    ParamsData ? : undefined;
     reqData: uploadFilesFileTest;
     type: "post";
-    resData: uploadFilesFilesRes;
+    resData: uploadFilesFilesRes
   };
   "/api/upload/videos": {
-    ParamsData?: {
-      videos: File;
+    ParamsData ? : {
+      videos: File
     };
     reqData: undefined;
     type: "post";
-    resData: uploadFilesFilesRes;
+    resData: uploadFilesFilesRes
   };
+  "/api/user/user_message/{id}": {
+    ParamsData ? : {
+      id: string
+    };
+    reqData: undefined;
+    type: "get";
+    resData: homeUserMessage
+  }
 }

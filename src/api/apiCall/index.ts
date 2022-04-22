@@ -13,7 +13,7 @@ export async function callApi<
   headers?: AxiosRequestConfig["headers"]
 ) {
   return new Promise<Paths[T]["resData"]>((resolve, reject) => {
-    if (localStorage.getItem("token")) {
+    if (!localStorage.getItem("token")) {
       return reject(new Error("error !!!"));
     }
 
@@ -23,7 +23,7 @@ export async function callApi<
     );
 
     AxiosRequest({
-      baseURL: "http://localhost:8081/",
+      baseURL: "http://localhost:3003/",
       url,
       params: data.params,
       data: data.reqData,
@@ -34,6 +34,9 @@ export async function callApi<
         if (res.mgsCode === 200) {
           resolve(res.body as Paths[T]["resData"]);
           return;
+        }
+        if (res.mgsText === "token失败") {
+          window.location.href = "#/";
         }
 
         Toast.show({ content: res.mgsText });
@@ -56,7 +59,7 @@ export async function callApiNotLogin<
 ) {
   return new Promise<Paths[T]["resData"]>((resolve, reject) => {
     AxiosRequest({
-      baseURL: "http://localhost:8081/",
+      baseURL: "http://localhost:3003/",
       url,
       params: data.params,
       data: data.reqData,

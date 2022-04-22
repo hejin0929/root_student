@@ -12,7 +12,8 @@ export const AxiosRequest = (data: AxiosRequestConfig): any => {
       return config;
     }
     if (localStorage.getItem("token")) {
-      return (config.headers = { token: localStorage.getItem("token") || "" });
+      config.headers = { token: localStorage.getItem("token") || "" };
+      return config;
     }
     window.location.href = "#/";
     return null;
@@ -40,6 +41,7 @@ export const AxiosRequest = (data: AxiosRequestConfig): any => {
             resolve(res.data);
           })
           .catch((err) => {
+            Toast.show({ content: "服务端请求失败！", icon: "fail" });
             reject(err);
           })
           .finally(() => reject(new Error("请求超时！！！")));
@@ -56,6 +58,7 @@ export const AxiosRequest = (data: AxiosRequestConfig): any => {
             resolve(res.data);
           })
           .catch((err) => {
+            Toast.show({ content: "服务端请求失败！", icon: "fail" });
             reject(err);
           })
           .finally(() => reject(new Error("请求超时！！！")));

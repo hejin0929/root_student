@@ -67,6 +67,9 @@ const gen = async () => {
           const list = valueData[path].post.parameters;
 
           list.forEach((element) => {
+            if (element.name === "Authorization") {
+              return;
+            }
             data.ParamsData[element.name] = element.type;
           });
         }
@@ -109,6 +112,9 @@ const gen = async () => {
           const list = valueData[path].get.parameters;
 
           list.forEach((element) => {
+            if (element.name === "Authorization") {
+              return;
+            }
             data.ParamsData[element.name] = element.type;
           });
 
@@ -186,7 +192,7 @@ const WriteFileApi = () => {
             paramsData[v] = "number";
           }
 
-          if ( typeof paramsData[v] === "object") {
+          if (typeof paramsData[v] === "object") {
             return `${v}: { ${Object.keys(paramsData[v])
               .map((vv) => {
                 if (vv === "required") {
@@ -216,7 +222,7 @@ const WriteFileApi = () => {
 
       return `"${v}": {${keys
         .map((v) => {
-          console.log("this is a ?? ", v)
+          console.log("this is a ?? ", v);
           if (v === "type") {
             return `${v}: "${data[v]}"`;
           }
@@ -228,8 +234,8 @@ const WriteFileApi = () => {
                   // console.log(data[v], vv);
                   let types = data[v][vv];
 
-                  if(types === "file"){
-                    types = "File"
+                  if (types === "file") {
+                    types = "File";
                   }
 
                   if (types === "integer") {
