@@ -13,7 +13,10 @@ class UploadStore {
     makeAutoObservable(this);
   }
 
-  handleFileChange(event: React.MutableRefObject<HTMLInputElement>) {
+  handleFileChange(
+    event: React.MutableRefObject<HTMLInputElement>,
+    callback?: Function
+  ) {
     const data = event.current.files?.[0] as File;
     const reader = new FileReader();
 
@@ -31,7 +34,7 @@ class UploadStore {
         headers: {
           "Content-Type": "application/json",
         },
-        baseURL: "http://localhost:3001",
+        baseURL: "http://localhost:3003",
         withCredentials: true,
       });
 
@@ -41,7 +44,8 @@ class UploadStore {
         .post("/api/upload/images", formData)
         .then(({ data }) => {
           if (data.mgsCode === 200) {
-            this.updateData({ images: this.images?.concat(reader.result) });
+            callback?.(data.body);
+            // this.updateData({ images: this.images?.concat(reader.result) });
           }
         })
         .catch((err) => {
@@ -66,7 +70,7 @@ class UploadStore {
         headers: {
           "Content-Type": "application/json",
         },
-        baseURL: "http://localhost:3001",
+        baseURL: "http://localhost:3003",
         withCredentials: true,
       });
 

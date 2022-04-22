@@ -6,6 +6,7 @@ import styleCss from "./index.module.scss";
 import { Upload } from "@widgets/upload";
 import Loading from "@widgets/loading";
 import Images from "@widgets/image";
+import Icons from "@/widgets/icons";
 
 const Admin: FC = () => {
   const store: AdminStore = useStore(AdminStore);
@@ -15,7 +16,15 @@ const Admin: FC = () => {
       <div className={styleCss.HeaderBlock}>
         <div className={styleCss.authContext}>
           <div className={styleCss.userImg}>
-            <Images url={store.user?.image || ""} />
+            <div className={styleCss.img}>
+              <Images url={store.user?.image || ""} />
+            </div>
+            <div className={styleCss.SetImg}>
+              <Icons icon="icon-xiugai" />
+              <div className={styleCss.setUpload}>
+                <Upload />
+              </div>
+            </div>
           </div>
           <div className={styleCss.userMessage}>
             <strong className={styleCss.userName}>{store.user?.name}</strong>

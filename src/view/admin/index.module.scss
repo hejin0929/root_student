@@ -14,8 +14,34 @@
             .userImg {
                 width: 70px;
                 height: 70px;
-                border-radius: 50%;
-                overflow: hidden;
+                position: relative;
+
+                .img {
+                    width: 70px;
+                    height: 70px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                }
+
+                .SetImg {
+                    width: 19px;
+                    height: 19px;
+                    background: #FC9A10;
+                    opacity: 0.8;
+                    border-radius: 50%;
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+
+                    >i {
+                        fill: #fff !important;
+                    }
+
+                    .setUpload {
+                        position: absolute;
+                        top: 0;
+                    }
+                }
             }
 
             .userMessage {

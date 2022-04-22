@@ -4,13 +4,14 @@ import { FC, useRef } from "react";
 import StyleCss from "./index.module.scss";
 import UploadStore from "./index.store";
 
-const Upload: FC = observer(() => {
-  const store: UploadStore = useStore(UploadStore);
-  const refs = useRef(null);
+const Upload: FC<{ opacity?: number; onChange?: Function }> = observer(
+  ({ opacity, onChange }) => {
+    const store: UploadStore = useStore(UploadStore);
+    const refs = useRef(null);
 
-  return (
-    <div className={StyleCss.upload}>
-      <ul className={StyleCss.list}>
+    return (
+      <div className={StyleCss.upload} style={{ opacity: opacity || 0 }}>
+        {/* <ul className={StyleCss.list}>
         {store.images?.map((v, i) => {
           return (
             <li key={i}>
@@ -18,18 +19,19 @@ const Upload: FC = observer(() => {
             </li>
           );
         })}
-      </ul>
-      <input
-        ref={refs}
-        type="file"
-        accept="image"
-        onChange={() => store.handleFileChange(refs as any)}
-      />
+      </ul> */}
+        <input
+          ref={refs}
+          type="file"
+          accept="image"
+          onChange={() => store.handleFileChange(refs as any, onChange)}
+        />
 
-      <UploadVideo />
-    </div>
-  );
-});
+        {/* <UploadVideo /> */}
+      </div>
+    );
+  }
+);
 
 const UploadVideo = observer(() => {
   const store: UploadStore = useStore(UploadStore);
@@ -58,4 +60,4 @@ const UploadVideo = observer(() => {
   );
 });
 
-export { Upload };
+export { Upload, UploadVideo };
