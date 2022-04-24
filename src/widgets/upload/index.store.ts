@@ -49,7 +49,9 @@ class UploadStore {
           }
         })
         .catch((err) => {
-          console.log("err is a", err);
+          callback?.("");
+          Toast.show({ content: err, icon: "fail" });
+          // console.log("err is a", err);
         });
     };
   }

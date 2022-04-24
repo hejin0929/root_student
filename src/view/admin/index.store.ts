@@ -8,11 +8,12 @@ type Users = ApiRequstResponse<"/api/user/user_message/{id}">;
 class AdminStore {
   user: Users | undefined;
   loading: boolean | undefined = false;
+  num: number | undefined;
 
   constructor({ user }: { user: User }) {
-    makeAutoObservable(this);
-
+    this.update({ num: 0 });
     this.init(user.uuid || "");
+    makeAutoObservable(this);
   }
 
   async init(uuid: string) {
