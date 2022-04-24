@@ -9,6 +9,13 @@ interface getCodeResCode {
   mgsCode: number;
   mgsText: string
 }
+interface homeMessageUpdateRes {
+  body: {
+    message: homeUserMessage;res: string;
+  };
+  mgsCode: number;
+  mgsText: string
+}
 interface homeUserMessage {
   birthday: string;
   image: string;
@@ -142,6 +149,12 @@ export interface Paths {
     reqData: undefined;
     type: "post";
     resData: uploadFilesFilesRes
+  };
+  "/api/user/user_message/update": {
+    ParamsData ? : undefined;
+    reqData: homeUserMessage;
+    type: "post";
+    resData: homeMessageUpdateRes
   };
   "/api/user/user_message/{id}": {
     ParamsData ? : {

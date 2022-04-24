@@ -24,7 +24,9 @@ const Admin: FC = () => {
             <div className={styleCss.SetImg}>
               <Icons icon="icon-xiugai" />
               <div className={styleCss.setUpload}>
-                <Upload />
+                <Upload
+                  onChange={(url: string) => store.handleSwitchImgs(url)}
+                />
               </div>
             </div>
           </div>

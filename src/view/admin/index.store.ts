@@ -26,6 +26,8 @@ class AdminStore {
     this.update({ user: res, loading: true });
   }
 
+  handleSwitchImgs(url: string) {}
+
   update(params: Partial<AdminStore>) {
     runInAction(() => Object.assign(this, params));
   }
