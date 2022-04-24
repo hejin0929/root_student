@@ -13,8 +13,14 @@ export const useRouter = (router?: Routers) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate(router?.path || "");
-  }, [router?.path]);
+    router?.updateData({ navigate });
+  }, []);
+
+  // console.log("this is a ?? ", router?.path);
+
+  // useEffect(() => {
+  //   navigate(router?.path || "");
+  // }, [router?.path]);
 
   return;
 };
@@ -24,14 +30,15 @@ export class Routers {
 
   params: Readonly<Params<string>> | undefined;
 
+  navigate: NavigateFunction | undefined;
+
   constructor() {
     makeAutoObservable(this);
   }
 
-  navigate(path: string) {
-    
-    this.updateData({ path });
-  }
+  // navigate(path: string) {
+  //   this.updateData({ path });
+  // }
 
   updateData(params: Partial<Routers>) {
     runInAction(() => Object.assign(this, params));
