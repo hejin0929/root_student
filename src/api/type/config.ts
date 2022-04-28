@@ -1,6 +1,3 @@
-interface chumResChum {
-  name: string
-}
 interface getCodeGetPhoneCode {
   code: string
 }
@@ -9,10 +6,24 @@ interface getCodeResCode {
   mgsCode: number;
   mgsText: string
 }
-interface homeMessageUpdateRes {
+interface homeKeysRes {
   body: {
-    message: homeUserMessage;res: string;
+    private: string;public: string;
   };
+  mgsCode: number;
+  mgsText: string
+}
+interface homeMessageRes {
+  body ? : homeUserMessage;
+  mgsCode: number;
+  mgsText: string
+}
+interface homeMessageUpdate {
+  message: homeUserMessage;
+  res: string
+}
+interface homeMessageUpdateRes {
+  body ? : homeMessageUpdate;
   mgsCode: number;
   mgsText: string
 }
@@ -76,7 +87,15 @@ export interface Paths {
     };
     reqData: undefined;
     type: "get";
-    resData: chumResChum
+    resData: homeUserMessage
+  };
+  "/api/home/key": {
+    ParamsData ? : {
+      id: number
+    };
+    reqData: undefined;
+    type: "get";
+    resData: homeKeysRes
   };
   "/api/home/message": {
     ParamsData ? : {
@@ -162,6 +181,6 @@ export interface Paths {
     };
     reqData: undefined;
     type: "get";
-    resData: homeUserMessage
+    resData: homeMessageRes
   }
 }

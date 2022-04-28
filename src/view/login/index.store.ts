@@ -2,7 +2,11 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { callApi, callApiNotLogin } from "@/api/apiCall";
 import { Look } from "@/store/auth";
 import classNames from "classnames";
-import { MyFormTypes, FormItemTypes } from "@widgets/myForm/index.store";
+import {
+  MyFormTypes,
+  FormItemTypes,
+  MyFormStore,
+} from "@widgets/myForm/index.store";
 import { language } from "@/config/language";
 import { Toast } from "antd-mobile";
 import { Routers } from "@/store/auth/router";

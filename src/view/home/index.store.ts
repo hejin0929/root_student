@@ -1,3 +1,4 @@
+import { callApi } from "@/api/apiCall";
 import { Look } from "@/store/auth";
 import { Routers } from "@/store/auth/router";
 import { User } from "@/store/auth/user";
@@ -12,6 +13,7 @@ class HomeStore {
   ws: WebSocketMessage | undefined;
   send = "";
   receive_id = "";
+  $$: Look | undefined;
 
   constructor({
     events,
@@ -22,13 +24,28 @@ class HomeStore {
     routers: Routers;
     user: User;
   }) {
-    this.updateData({ routers, events, user });
+    this.updateData({ routers, events, user, $$: events });
     makeAutoObservable(this);
     this.ws = new WebSocketMessage({
-      // url: "ws://127.0.0.1:10215/ws",
       url: "ws://127.0.0.1:8081/api/ws",
       user: this.user!,
     });
+    this.getKeys();
+  }
+
+  async getKeys() {
+    const res = await callApi("/api/home/key", {
+      reqData: undefined,
+      params: {
+        id: 1,
+      },
+      method: "get",
+    });
+
+    if (res.mgsCode === 200) {
+      sessionStorage.setItem("private", res.body.private);
+      sessionStorage.setItem("public", res.body.public);
+    }
   }
 
   handleClick() {

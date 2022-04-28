@@ -12,7 +12,9 @@ export const AxiosRequest = (data: AxiosRequestConfig): any => {
       return config;
     }
     if (localStorage.getItem("token")) {
-      config.headers = { token: localStorage.getItem("token") || "" };
+      config.headers = Object.assign(data.headers, {
+        token: localStorage.getItem("token") || "",
+      });
       return config;
     }
     window.location.href = "#/";
@@ -34,7 +36,6 @@ export const AxiosRequest = (data: AxiosRequestConfig): any => {
         requset
           .get(data.url || "", {
             params: data.params,
-            headers: data.headers,
             data: data.data,
           })
           .then((res) => {
@@ -51,7 +52,6 @@ export const AxiosRequest = (data: AxiosRequestConfig): any => {
         requset
           .post(data.url || "", {
             params: data.params,
-            headers: data.headers,
             data: data.data,
           })
           .then((res) => {

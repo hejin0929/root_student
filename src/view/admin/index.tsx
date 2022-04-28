@@ -11,7 +11,7 @@ import Icons from "@/widgets/icons";
 const Admin: FC = () => {
   const store: AdminStore = useStore(AdminStore);
 
-  unStore(AdminStore);
+  // unStore(AdminStore);
 
   return (
     <div className={styleCss.adminPage}>

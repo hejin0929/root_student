@@ -67,7 +67,7 @@ const gen = async () => {
           const list = valueData[path].post.parameters;
 
           list.forEach((element) => {
-            if (element.name === "Authorization") {
+            if (element.name === "token" || element.name === "Authorization") {
               return;
             }
             data.ParamsData[element.name] = element.type;
@@ -112,7 +112,7 @@ const gen = async () => {
           const list = valueData[path].get.parameters;
 
           list.forEach((element) => {
-            if (element.name === "Authorization") {
+            if (element.name === "token" || element.name === "Authorization") {
               return;
             }
             data.ParamsData[element.name] = element.type;
