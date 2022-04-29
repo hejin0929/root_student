@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ContextStore } from "@store/index";
 import { Routers, useRouter } from "./router";
 import { Params, useParams } from "react-router-dom";
@@ -10,8 +10,8 @@ export const useStore = (
   callback?: (data: any) => void
 ) => {
   const storeMap = useContext(ContextStore);
-
   const routerParams = useParams();
+  useRouter(storeMap.methodsStore);
 
   if (!storeMap.get(store)) {
     const data = storeMap.create(store, {
@@ -21,7 +21,6 @@ export const useStore = (
     });
     return data;
   }
-  useRouter(storeMap.methodsStore);
 
   // 只会触发一次的init传参
   if (storeMap.aHook.get(store)) {
@@ -36,7 +35,11 @@ export const useStore = (
 
 export const unStore = (store: any) => {
   const stores = useContext(ContextStore);
-  return stores.unStore(store);
+  useEffect(() => {
+    return () => {
+      stores.unStore(store);
+    };
+  }, []);
 };
 
 export type Look = {

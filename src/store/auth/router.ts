@@ -30,7 +30,7 @@ export class Routers {
 
   params: Readonly<Params<string>> | undefined;
 
-  navigate: NavigateFunction | undefined;
+  navigate: NavigateFunction = () => {};
 
   constructor() {
     makeAutoObservable(this);

@@ -1,6 +1,6 @@
-import { useStore } from "@/store/auth";
+import { useStore, unStore } from "@/store/auth";
 import { observer } from "mobx-react-lite";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import AdminStore from "./index.store";
 import styleCss from "./index.module.scss";
 import { Upload } from "@widgets/upload";
@@ -10,6 +10,8 @@ import Icons from "@/widgets/icons";
 
 const Admin: FC = () => {
   const store: AdminStore = useStore(AdminStore);
+
+  // unStore(AdminStore);
 
   return (
     <div className={styleCss.adminPage}>
@@ -22,7 +24,9 @@ const Admin: FC = () => {
             <div className={styleCss.SetImg}>
               <Icons icon="icon-xiugai" />
               <div className={styleCss.setUpload}>
-                <Upload />
+                <Upload
+                  onChange={(url: string) => store.handleSwitchImgs(url)}
+                />
               </div>
             </div>
           </div>
@@ -34,6 +38,10 @@ const Admin: FC = () => {
       </div>
       <div className={styleCss.adminMyCenter}></div>
       {store.loading ?? <Loading text="数据请求中..." />}
+
+      <div onClick={() => store.update({ num: (store.num || 0) + 1 })}>
+        点我加一{store.num}
+      </div>
     </div>
   );
 };

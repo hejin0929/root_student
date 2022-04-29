@@ -37,6 +37,9 @@ export class MyFormStore {
     events.on(
       "init",
       (params: { list: MyFormTypes[]; onSubmit: (data: any) => void }) => {
+        if (!params) {
+          return;
+        }
         this.updateData({ call: params.onSubmit });
       }
     );
@@ -51,6 +54,7 @@ export class MyFormStore {
     if (this.call) {
       this.call?.(data);
     }
+    this.events?.subscribe("formSubmit", data);
   }
 
   updateData(params: Partial<MyFormStore>) {

@@ -2,6 +2,16 @@ import { Paths } from "../type/config";
 import { AxiosRequest } from "../axios";
 import { Toast } from "antd-mobile";
 import { AxiosRequestConfig } from "axios";
+import jsencrypt from "jsencrypt";
+import { HmacSHA256 } from "crypto-js";
+
+function hashSHA246(params: any) {
+  // 通过 hmacsha256 生成散列字符串
+  return HmacSHA256(
+    JSON.stringify(params),
+    sessionStorage.getItem("private") || ""
+  ).toString();
+}
 
 export async function callApi<
   T extends keyof Paths,
@@ -22,6 +32,27 @@ export async function callApi<
       headers
     );
 
+    if (sessionStorage.getItem("private")) {
+      const Authorization = hashSHA246(data.reqData);
+
+      const JSencrypt = new jsencrypt();
+      // 对实例化对象设置公钥
+      JSencrypt.setPublicKey(sessionStorage.getItem("public") || "");
+      // 通过公钥对数据加密
+      const encrypt = JSencrypt.encrypt(JSON.stringify(data.reqData));
+
+      headerData["key"] = encrypt;
+
+      var decrypt = new jsencrypt();
+      decrypt.setPrivateKey(sessionStorage.getItem("private") || "");
+
+      var uncrypted = decrypt.decrypt(encrypt || "");
+      console.log("解密后数据:%o", uncrypted);
+
+      // console.log("this is a ?? ", encrypt);
+    }
+    console.log(headerData);
+
     AxiosRequest({
       baseURL: "http://localhost:3003/",
       url,
@@ -32,7 +63,7 @@ export async function callApi<
     })
       .then((res: any) => {
         if (res.mgsCode === 200) {
-          resolve(res.body as Paths[T]["resData"]);
+          resolve(res as Paths[T]["resData"]);
           return;
         }
         if (res.mgsText === "token失败") {
