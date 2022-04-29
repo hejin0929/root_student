@@ -22,7 +22,7 @@ export default observer(() => {
       <div className={styleCss.content}>
         <div className={styleCss.searchBox}>
           <Input placeholder="输入查找ID 或 手机号" />
-          <span className={styleCss.btuIcons}>
+          <span className={styleCss.btuIcons} onClick={() => {}}>
             <Icon icon="icon-sousuo" />
           </span>
         </div>
