@@ -45,11 +45,6 @@ export async function callApi<
 
       var decrypt = new jsencrypt();
       decrypt.setPrivateKey(sessionStorage.getItem("private") || "");
-
-      var uncrypted = decrypt.decrypt(encrypt || "");
-      console.log("解密后数据:%o", uncrypted);
-
-      // console.log("this is a ?? ", encrypt);
     }
     console.log(headerData);
 

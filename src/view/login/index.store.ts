@@ -173,6 +173,13 @@ export default class LoginStore {
     }).then((res) => {
       Toast.show({ content: "注册成功" });
     });
+    // callApi("/api/user/user_message/update", {
+    //   reqData: undefined,
+    //   method: "post",
+    //   params: undefined,
+    // }).then( res => {
+    //   res.body.
+    // });
   }
 
   // handleClickBottom() {

@@ -3,6 +3,7 @@ const Home = lazy(() => import("@myPages/home"));
 const Login = lazy(() => import("@myPages/login"));
 const Admin = lazy(() => import("@myPages/admin"));
 const AddUser = lazy(() => import("@myPages/addUser"));
+const Render = lazy(() => import("@myPages/render"));
 
 import { useRoutes } from "react-router-dom";
 
@@ -28,6 +29,10 @@ export const RouterBase = () =>
     {
       path: "add_user",
       element: <AddUser />,
+    },
+    {
+      path: "render",
+      element: <Render />,
     },
     {
       path: "*",
