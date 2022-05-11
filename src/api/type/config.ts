@@ -1,3 +1,21 @@
+interface chumAddReq {
+  friend_id: string;
+  permissions: string;
+  source: number;
+  uuid: string
+}
+interface chumAddRes {
+  body ? : string;
+  mgsCode: number;
+  mgsText: string
+}
+interface chumResChum {
+  body: {
+    source: integer;user: homeUserMessage;
+  };
+  mgsCode: number;
+  mgsText: string
+}
 interface getCodeGetPhoneCode {
   code: string
 }
@@ -81,13 +99,21 @@ interface uploadFilesFilesRes {
 }
 
 export interface Paths {
+  "/api/chum/add": {
+    ParamsData ? : {
+      data: undefined
+    };
+    reqData: chumAddReq;
+    type: "post";
+    resData: chumAddRes
+  };
   "/api/chum/search/{phone}": {
     ParamsData ? : {
       phone: string
     };
     reqData: undefined;
     type: "get";
-    resData: homeUserMessage
+    resData: chumResChum
   };
   "/api/home/key": {
     ParamsData ? : {

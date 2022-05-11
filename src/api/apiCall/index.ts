@@ -46,7 +46,6 @@ export async function callApi<
       var decrypt = new jsencrypt();
       decrypt.setPrivateKey(sessionStorage.getItem("private") || "");
     }
-    console.log(headerData);
 
     AxiosRequest({
       baseURL: "http://localhost:3003/",

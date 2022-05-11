@@ -27,4 +27,44 @@
             padding: 2px 10px;
         }
     }
+
+    .userMessage {
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        .headerImg {
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+
+        .userNameAndIntroduce {
+            margin-left: 20px;
+
+            .userName {
+                font-weight: 700;
+                font-size: 14px;
+            }
+        }
+
+        .rigthBtu {
+            position: absolute;
+            right: 20px;
+
+            :global {
+                .adm-button {
+                    padding: 0 10px !important;
+                }
+            }
+        }
+    }
+
+    .notData {
+        text-align: center;
+        font-weight: 700;
+    }
 }
