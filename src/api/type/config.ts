@@ -1,7 +1,7 @@
 interface chumAddReq {
   friend_id: string;
   permissions: string;
-  source: string;
+  source: number;
   uuid: string
 }
 interface chumAddRes {
@@ -9,8 +9,10 @@ interface chumAddRes {
   mgsCode: number;
   mgsText: string
 }
-interface chumSearchUserRes {
-  body ? : userMessage;
+interface chumResChum {
+  body: {
+    source: integer;user: homeUserMessage;
+  };
   mgsCode: number;
   mgsText: string
 }
@@ -30,14 +32,30 @@ interface homeKeysRes {
   mgsText: string
 }
 interface homeMessageRes {
-  body ? : userMessage;
+  body ? : homeUserMessage;
   mgsCode: number;
   mgsText: string
 }
+interface homeMessageUpdate {
+  message: homeUserMessage;
+  res: string
+}
 interface homeMessageUpdateRes {
-  body ? : userMessageUpdate;
+  body ? : homeMessageUpdate;
   mgsCode: number;
   mgsText: string
+}
+interface homeUserMessage {
+  birthday: string;
+  image: string;
+  introduce: string;
+  name: string;
+  phone: string;
+  region: string;
+  sex: number;
+  state: number;
+  user_id: string;
+  uuid: string
 }
 interface loginUser {
   id: string;
@@ -79,29 +97,13 @@ interface uploadFilesFilesRes {
   mgsCode: number;
   mgsText: string
 }
-interface userMessage {
-  birthday: string;
-  image: string;
-  introduce: string;
-  name: string;
-  phone: string;
-  region: string;
-  sex: number;
-  state: number;
-  user_id: string;
-  uuid: string
-}
-interface userMessageUpdate {
-  message: userMessage;
-  res: string
-}
 
 export interface Paths {
   "/api/chum/add": {
     ParamsData ? : {
       data: undefined
     };
-    reqData: undefined;
+    reqData: chumAddReq;
     type: "post";
     resData: chumAddRes
   };
@@ -111,7 +113,7 @@ export interface Paths {
     };
     reqData: undefined;
     type: "get";
-    resData: chumSearchUserRes
+    resData: chumResChum
   };
   "/api/home/key": {
     ParamsData ? : {
@@ -195,7 +197,7 @@ export interface Paths {
   };
   "/api/user/user_message/update": {
     ParamsData ? : undefined;
-    reqData: userMessage;
+    reqData: homeUserMessage;
     type: "post";
     resData: homeMessageUpdateRes
   };

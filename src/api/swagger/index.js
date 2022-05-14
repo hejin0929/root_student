@@ -70,6 +70,22 @@ const gen = async () => {
             if (element.name === "token" || element.name === "Authorization") {
               return;
             }
+            if (!element.type) {
+              console.log(
+                element.schema["$ref"].split("/")[2].split(".").join("")
+              );
+              data.reqData = element.schema["$ref"]
+                .split("/")[2]
+                .split(".")
+                .join("");
+            }
+
+            if (element.schema?.type === "array") {
+              data.reqData = element.schema.items["$ref"]
+                .split("/")[2]
+                .split(".")
+                .join("");
+            }
             data.ParamsData[element.name] = element.type;
           });
         }
@@ -222,7 +238,6 @@ const WriteFileApi = () => {
 
       return `"${v}": {${keys
         .map((v) => {
-          console.log("this is a ?? ", v);
           if (v === "type") {
             return `${v}: "${data[v]}"`;
           }

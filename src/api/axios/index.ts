@@ -52,7 +52,7 @@ export const AxiosRequest = (data: AxiosRequestConfig): any => {
         requset
           .post(data.url || "", {
             params: data.params,
-            data: data.data,
+            ...data.data,
           })
           .then((res) => {
             resolve(res.data);
