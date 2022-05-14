@@ -1,3 +1,19 @@
+interface chumAddReq {
+  friend_id: string;
+  permissions: string;
+  source: string;
+  uuid: string
+}
+interface chumAddRes {
+  body ? : string;
+  mgsCode: number;
+  mgsText: string
+}
+interface chumSearchUserRes {
+  body ? : userMessage;
+  mgsCode: number;
+  mgsText: string
+}
 interface getCodeGetPhoneCode {
   code: string
 }
@@ -14,30 +30,14 @@ interface homeKeysRes {
   mgsText: string
 }
 interface homeMessageRes {
-  body ? : homeUserMessage;
+  body ? : userMessage;
   mgsCode: number;
   mgsText: string
-}
-interface homeMessageUpdate {
-  message: homeUserMessage;
-  res: string
 }
 interface homeMessageUpdateRes {
-  body ? : homeMessageUpdate;
+  body ? : userMessageUpdate;
   mgsCode: number;
   mgsText: string
-}
-interface homeUserMessage {
-  birthday: string;
-  image: string;
-  introduce: string;
-  name: string;
-  phone: string;
-  region: string;
-  sex: number;
-  state: number;
-  user_id: string;
-  uuid: string
 }
 interface loginUser {
   id: string;
@@ -79,15 +79,39 @@ interface uploadFilesFilesRes {
   mgsCode: number;
   mgsText: string
 }
+interface userMessage {
+  birthday: string;
+  image: string;
+  introduce: string;
+  name: string;
+  phone: string;
+  region: string;
+  sex: number;
+  state: number;
+  user_id: string;
+  uuid: string
+}
+interface userMessageUpdate {
+  message: userMessage;
+  res: string
+}
 
 export interface Paths {
+  "/api/chum/add": {
+    ParamsData ? : {
+      data: undefined
+    };
+    reqData: undefined;
+    type: "post";
+    resData: chumAddRes
+  };
   "/api/chum/search/{phone}": {
     ParamsData ? : {
       phone: string
     };
     reqData: undefined;
     type: "get";
-    resData: homeUserMessage
+    resData: chumSearchUserRes
   };
   "/api/home/key": {
     ParamsData ? : {
@@ -171,7 +195,7 @@ export interface Paths {
   };
   "/api/user/user_message/update": {
     ParamsData ? : undefined;
-    reqData: homeUserMessage;
+    reqData: userMessage;
     type: "post";
     resData: homeMessageUpdateRes
   };

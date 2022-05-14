@@ -21,8 +21,14 @@ export default observer(() => {
       </div>
       <div className={styleCss.content}>
         <div className={styleCss.searchBox}>
-          <Input placeholder="输入查找ID 或 手机号" />
-          <span className={styleCss.btuIcons} onClick={() => {}}>
+          <Input
+            placeholder="输入查找ID 或 手机号"
+            onChange={(event) => store.update({ id: event })}
+          />
+          <span
+            className={styleCss.btuIcons}
+            onClick={() => store.getUserMessage()}
+          >
             <Icon icon="icon-sousuo" />
           </span>
         </div>
