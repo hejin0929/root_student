@@ -444,6 +444,11 @@
   "resolved" "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz"
   "version" "0.16.2"
 
+"@types/three@^0.140.0":
+  "integrity" "sha512-YPJLSIY6uKUOp1k6BZYDq5GtEIdhfeK04UCbc9IPAVbdn/RNjkfrbnyd7smrsNkJhc0IFASLpd3AAYgwqgXKVQ=="
+  "resolved" "https://registry.npmjs.org/@types/three/-/three-0.140.0.tgz"
+  "version" "0.140.0"
+
 "@use-gesture/core@10.2.5":
   "integrity" "sha512-Pggq5qLipJNYjMq6R7p7Y5h1juUlTkrhi9KqFJH6PcRFCNn+evjbOvpX7JEFehrx4Ik9UZcQpkmR+E0s7a5Lbg=="
   "resolved" "https://registry.npmjs.org/@use-gesture/core/-/core-10.2.5.tgz"
@@ -2387,6 +2392,11 @@
   "integrity" "sha1-AxjqrKsobdz4j6Phl36KbuaVe1k="
   "resolved" "https://registry.npmjs.org/three-js/-/three-js-79.0.0.tgz"
   "version" "79.0.0"
+
+"three@^0.140.2":
+  "integrity" "sha512-DdT/AHm/TbZXEhQKQpGt5/iSgBrmXpjU26FNtj1KhllVPTKj1eG4X/ShyD5W2fngE+I1s1wa4ttC4C3oCJt7Ag=="
+  "resolved" "https://registry.npmjs.org/three/-/three-0.140.2.tgz"
+  "version" "0.140.2"
 
 "to-fast-properties@^2.0.0":
   "integrity" "sha1-3F5pjL0HkmW8c+A3doGk5Og/YW4="
