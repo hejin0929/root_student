@@ -5,9 +5,36 @@
 
         padding: 0 20px;
 
-        .leftBlock {
+        .rightBlock {
             float: right;
             line-height: 50px;
+
+
+        }
+
+        .leftBlock {
+            float: left;
+            line-height: 50px;
+
+            .leftIcon {
+                font-size: 20px;
+            }
+
+            .addNum {
+                display: inline-block;
+                position: absolute;
+                color: #c14e4d;
+                text-align: center;
+                top: 25px;
+                left: 28px;
+                height: 15px;
+                width: 15px;
+                line-height: 15px;
+                font-weight: 700;
+                border-radius: 50%;
+                background-color: white;
+            }
+
         }
     }
 }

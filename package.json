@@ -29,7 +29,8 @@
     "react-router-dom": "6",
     "sass": "^1.43.4",
     "sass-loader": "^12.3.0",
-    "swagger-parser": "^10.0.3"
+    "swagger-parser": "^10.0.3",
+    "three-js": "^79.0.0"
   },
   "devDependencies": {
     "@types/babel__core": "^7.1.17",

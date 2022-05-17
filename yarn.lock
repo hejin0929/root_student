@@ -2383,6 +2383,11 @@
     "mkdirp" "^1.0.3"
     "yallist" "^4.0.0"
 
+"three-js@^79.0.0":
+  "integrity" "sha1-AxjqrKsobdz4j6Phl36KbuaVe1k="
+  "resolved" "https://registry.npmjs.org/three-js/-/three-js-79.0.0.tgz"
+  "version" "79.0.0"
+
 "to-fast-properties@^2.0.0":
   "integrity" "sha1-3F5pjL0HkmW8c+A3doGk5Og/YW4="
   "resolved" "https://registry.npmjs.org/to-fast-properties/-/to-fast-properties-2.0.0.tgz"

@@ -3,14 +3,24 @@ import { Button, Input } from "antd-mobile";
 import { observer } from "mobx-react-lite";
 import HomeStore from "./index.store";
 import styleCss from "./index.module.scss";
+import NewUserStore from "../newUser/index.store";
+import { useEffect } from "react";
 
 export default observer(() => {
   const store: HomeStore = useStore(HomeStore);
+  const newUser: NewUserStore = useStore(NewUserStore);
 
   return (
     <div className={styleCss.HomeMain}>
       <div className={styleCss.homeHeader}>
         <div className={styleCss.leftBlock}>
+          <i
+            className={"iconfont icon-geren " + styleCss.leftIcon}
+            onClick={() => store.handleAddUser()}
+          />
+          <span className={styleCss.addNum}>2</span>
+        </div>
+        <div className={styleCss.rightBlock}>
           <i
             className="iconfont icon-jia"
             onClick={() => store.handleAddUser()}
