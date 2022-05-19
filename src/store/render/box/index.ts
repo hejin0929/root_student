@@ -1,7 +1,7 @@
-import { BoxGeometry } from "three";
+import { BoxGeometry, Object3D } from "three";
 
 class Box {
-  root: BoxGeometry | undefined;
+  root: Object3D<Event> | BoxGeometry | undefined;
   width: number = 1;
   height: number = 1;
   depth: number = 1;

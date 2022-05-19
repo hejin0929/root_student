@@ -11,6 +11,8 @@ const Render: FC = () => {
   useEffect(() => {
     store.render(ref);
     window.addEventListener("resize", () => {
+      console.log("this is a update ");
+
       store.render(ref);
     });
   }, []);

@@ -1,5 +1,8 @@
+import Box from "@/store/render/box";
+import Gamera from "@/store/render/gamera";
 import { makeAutoObservable } from "mobx";
 import * as THREE from "three";
+import { Object3D } from "three";
 
 class RenderStore {
   app: React.MutableRefObject<any> | undefined;
@@ -65,6 +68,29 @@ class RenderStore {
     if (element.current.childNodes[0]) {
       element.current.removeChild(element.current.childNodes[0]);
     }
+
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(element.current.clientWidth, element.current.clientHeight);
+
+    element.current.appendChild(renderer.domElement);
+
+    /// ---> >>>
+    const scene = new THREE.Scene();
+
+    const box = new Box();
+
+    scene.add(box.root as Object3D);
+
+    const gamera = new Gamera();
+
+    function animate() {
+      // requestAnimationFrame(animate);
+      // cube.rotation.x += 0.01;
+      // cube.rotation.y += 0.01;
+      renderer.render(scene, gamera.root as any);
+    }
+    animate();
+  }
 }
 
 export default RenderStore;
