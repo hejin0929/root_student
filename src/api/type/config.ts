@@ -10,19 +10,21 @@ interface chumAddRes {
   mgsText: string
 }
 interface chumApplyUser {
-  list: array;
+  list: {
+    hello: string;time: string;
+  } [];
   source: number;
   user_id: string;
   user_name: string
 }
 interface chumApplyUserRes {
-  body ? : array;
+  body ? : chumApplyUser[];
   mgsCode: number;
   mgsText: string
 }
 interface chumResChum {
   body: {
-    relation: integer;source: integer;user: userMessage;
+    relation: number;source: number;user: userMessage;
   };
   mgsCode: number;
   mgsText: string

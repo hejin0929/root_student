@@ -5,7 +5,7 @@ import { Routers } from "@/store/auth/router";
 import { User } from "@/store/auth/user";
 import { makeAutoObservable, runInAction } from "mobx";
 
-type NewUser = ApiRequstResponse<"/api/chum/apply">;
+type NewUser = ApiRequstResponse<"/api/chum/apply">["body"];
 
 class NewUserStore {
   user: User | undefined;
@@ -33,11 +33,9 @@ class NewUserStore {
       method: "get",
     });
 
-    console.log("this is a ?? ", res);
-
-    // if (res) {
-
-    // }
+    if (res.mgsCode === 200) {
+      this.list = res.body;
+    }
   }
 
   update(params: Partial<NewUserStore>): void {

@@ -39,6 +39,13 @@ const gen = async () => {
         key.split(".").join(""),
         ObjectInNewType(parsed.definitions[key])
       );
+
+      // console.log(
+      //   ObjectInNewType(parsed.definitions[key])
+      //   // parsed.definitions[key]
+      // );
+
+      // console.log("this is data ?? ", parsed.definitions[key]);
     }
 
     for (const path in parsed.paths) {
@@ -71,9 +78,6 @@ const gen = async () => {
               return;
             }
             if (!element.type) {
-              console.log(
-                element.schema["$ref"].split("/")[2].split(".").join("")
-              );
               data.reqData = element.schema["$ref"]
                 .split("/")[2]
                 .split(".")
@@ -155,7 +159,6 @@ const gen = async () => {
       }
     }
 
-    // console.log("this is ?? Map", PathMap, TypeData);
     WriteFileApi();
   } catch (e) {
     console.log("this is err", e);
@@ -167,14 +170,47 @@ function ObjectInNewType(obj) {
 
   const newType = {};
   for (const key in TypeData) {
-    if (TypeData[key]?.$ref) {
-      const child = TypeData[key]?.$ref.split("/")[2];
-      newType[key] = child.split(".").join("");
-    } else if (TypeData[key]?.type === "object") {
-      newType[key] = ObjectInNewType(TypeData[key]);
-    } else {
-      newType[key] = TypeData[key]?.type ?? "undefined";
+    switch (TypeData[key].type) {
+      case "array":
+        if (TypeData[key]?.items["$ref"]) {
+          const child = TypeData[key]?.items["$ref"].split("/")[2];
+          newType[key] = child.split(".").join("") + "[]";
+        } else if (TypeData[key]?.items["type"]) {
+          newType[key] = [ObjectInNewType(TypeData[key].items)];
+
+          console.log(newType[key]);
+        }
+        break;
+      case "object":
+        newType[key] = ObjectInNewType(TypeData[key]);
+        break;
+
+      case "integer":
+        newType[key] = "number";
+        break;
+
+      default:
+        if (TypeData[key]?.$ref) {
+          const child = TypeData[key]?.$ref.split("/")[2];
+          newType[key] = child.split(".").join("");
+        } else {
+          newType[key] = TypeData[key]?.type ?? "undefined";
+        }
+        break;
     }
+
+    // console.log("this is a item ?? ", TypeData[key]);
+    // if (TypeData[key]?.type === "array" && TypeData[key]?.items["$ref"]) {
+    //   const child = TypeData[key]?.items["$ref"].split("/")[2];
+    //   newType[key] = child.split(".").join("") + "[]";
+    // } else if (TypeData[key]?.$ref) {
+    //   const child = TypeData[key]?.$ref.split("/")[2];
+    //   newType[key] = child.split(".").join("");
+    // } else if (TypeData[key]?.type === "object") {
+    //   newType[key] = ObjectInNewType(TypeData[key]);
+    // } else {
+    //   newType[key] = TypeData[key]?.type ?? "undefined";
+    // }
   }
   newType.required = obj.required || undefined;
   return newType;
@@ -204,11 +240,14 @@ const WriteFileApi = () => {
 
       return `\ninterface ${v}{${keys
         .map((v) => {
+          // console.log(paramsData[v]);
           if (paramsData[v] === "integer") {
             paramsData[v] = "number";
           }
 
-          if (typeof paramsData[v] === "object") {
+          if (
+            Object.prototype.toString.call(paramsData[v]) === "[object Object]"
+          ) {
             return `${v}: { ${Object.keys(paramsData[v])
               .map((vv) => {
                 if (vv === "required") {
@@ -218,6 +257,18 @@ const WriteFileApi = () => {
                 return `${vv}: ${paramsData[v][vv]}\n`;
               })
               .join(";")} }`;
+          }
+          if (
+            Object.prototype.toString.call(paramsData[v]) === "[object Array]"
+          ) {
+            return `${v}: { ${Object.keys(paramsData[v][0])
+              .map((vv) => {
+                if (vv === "required") {
+                  return;
+                }
+                return `${vv}: ${paramsData[v][0][vv]}\n`;
+              })
+              .join(";")} }[]`;
           }
           if (isMust?.indexOf(v) !== -1) {
             return `${v}: ${paramsData[v]}`;
