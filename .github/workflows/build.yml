@@ -59,8 +59,8 @@ jobs:
             # - name: Qshell account
             #   run: qshell account ${{ env.QN_ACCESSKEY }} ${{ env.QN_SECRETKEY }} pure
 
-            - name: Upload source
-              run: yarn cdn
+            # - name: Upload source
+            #   run: yarn cdn
 
             # 上传打包资源
             - name: Deploy
