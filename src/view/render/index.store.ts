@@ -2,7 +2,11 @@ import Box from "@/store/render/box";
 import Gamera from "@/store/render/gamera";
 import { makeAutoObservable } from "mobx";
 import * as THREE from "three";
+<<<<<<< HEAD
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+=======
+import { BoxGeometry, Object3D } from "three";
+>>>>>>> d174cae17f96c508eed9a1dacaa989a0b2362d09
 
 class RenderStore {
   app: React.MutableRefObject<any> | undefined;
@@ -65,22 +69,31 @@ class RenderStore {
   // }
 
   render(element: React.MutableRefObject<any>) {
+<<<<<<< HEAD
     // console.log(element.current.width);
 
     /**
      * 创建场景对象Scene
      */
+=======
+>>>>>>> d174cae17f96c508eed9a1dacaa989a0b2362d09
     var scene = new THREE.Scene();
     /**
      * 创建网格模型
      */
     // var geometry = new THREE.SphereGeometry(60, 40, 40); //创建一个球体几何对象
     var geometry = new THREE.BoxGeometry(100, 100, 100); //创建一个立方体几何对象Geometry
+<<<<<<< HEAD
+=======
+    console.log(geometry);
+
+>>>>>>> d174cae17f96c508eed9a1dacaa989a0b2362d09
     var material = new THREE.MeshLambertMaterial({
       color: 0x0000ff,
     }); //材质对象Material
     var mesh = new THREE.Mesh(geometry, material); //网格模型对象Mesh
     scene.add(mesh); //网格模型添加到场景中
+<<<<<<< HEAD
 
     // 球体网格模型
     var geometry2 = new THREE.SphereGeometry(60, 40, 40);
@@ -96,12 +109,18 @@ class RenderStore {
     var axisHelper = new THREE.AxesHelper(250);
     scene.add(axisHelper);
 
+=======
+>>>>>>> d174cae17f96c508eed9a1dacaa989a0b2362d09
     /**
      * 光源设置
      */
     //点光源
     var point = new THREE.PointLight(0xffffff);
+<<<<<<< HEAD
     point.position.set(0, 0, 0); //点光源位置
+=======
+    point.position.set(400, 200, 300); //点光源位置
+>>>>>>> d174cae17f96c508eed9a1dacaa989a0b2362d09
     scene.add(point); //点光源添加到场景中
     //环境光
     var ambient = new THREE.AmbientLight(0x444444);
@@ -125,6 +144,7 @@ class RenderStore {
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(width, height); //设置渲染区域尺寸
     renderer.setClearColor(0xb9d3ff, 1); //设置背景颜色
+<<<<<<< HEAD
     element.current.appendChild(renderer.domElement); //body元素中插入canvas对象
     //执行渲染操作   指定场景、相机作为参数
     renderer.render(scene, camera);
@@ -146,6 +166,12 @@ class RenderStore {
     // requestAnimationFrame(active);
     var controls = new OrbitControls(camera, renderer.domElement); //创建控件对象
     controls.addEventListener("change", render); //监听鼠标、键盘事件
+=======
+    // document.body.appendChild(renderer.domElement); //body元素中插入canvas对象
+    element.current.appendChild(renderer.domElement);
+    //执行渲染操作   指定场景、相机作为参数
+    renderer.render(scene, camera);
+>>>>>>> d174cae17f96c508eed9a1dacaa989a0b2362d09
   }
 }
 
