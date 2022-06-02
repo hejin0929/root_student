@@ -39,7 +39,7 @@ class AdminStore {
       params: undefined,
       reqData: this.user,
     });
-    Toast.show({ content: res.body?.res });
+    Toast.show({ content: res.body?.name });
 
     // callApi("/api/user/user_message/update", {}).then(res => {
     //   res.message.
