@@ -16,7 +16,7 @@ export default observer(() => {
         <div className={styleCss.leftBlock}>
           <i
             className={"iconfont icon-geren " + styleCss.leftIcon}
-            onClick={() => store.handleAddUser()}
+            onClick={() => store.handleApplyUser()}
           />
           <span className={styleCss.addNum}>{newUser.list?.length || 0}</span>
         </div>

@@ -60,6 +60,10 @@ class HomeStore {
     });
   }
 
+  handleApplyUser() {
+    this.routers?.navigate("/new_user");
+  }
+
   handleAddUser() {
     this.routers?.navigate("/add_user");
   }
