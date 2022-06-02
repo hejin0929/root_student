@@ -66,9 +66,9 @@ jobs:
             - name: Deploy
               uses: easingthemes/ssh-deploy@v2.0.7
               env:
-                  SSH_PRIVATE_KEY: ${{ env.SERVER_PRIVATE_KEY }}
+                  SSH_PRIVATE_KEY: ${{ env.KEY }}
                   ARGS: '-avz --delete'
-                  SOURCE: 'dist/production/index.html'
+                  SOURCE: 'dist/index.html'
                   REMOTE_HOST: ${{ env.SERVER_HOST }}
                   REMOTE_USER: ${{ env.USER_NAME }}
                   TARGET: /dist # 服务器目标路径
