@@ -5,5 +5,8 @@
   "systemLanguage": "语言设置",
   "login": "登陆",
   "codeLogin": "验证码登陆",
-  "passwordLogin": "密码登陆"
+  "passwordLogin": "密码登陆",
+  "home": {
+    "title": "主页"
+  }
 }
