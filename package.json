@@ -31,7 +31,8 @@
     "sass-loader": "^12.3.0",
     "swagger-parser": "^10.0.3",
     "three": "^0.140.2",
-    "three-js": "^79.0.0"
+    "three-js": "^79.0.0",
+    "web-audio-recorder-js": "^0.0.2"
   },
   "devDependencies": {
     "@types/babel__core": "^7.1.17",
