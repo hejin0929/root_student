@@ -14,6 +14,24 @@ class HomeStore {
   send = "";
   receive_id = "";
   $$: Look | undefined;
+  modules = [
+    {
+      name: "探讨",
+      icon: "icon-xinxifill",
+    },
+    {
+      name: "个人",
+      icon: "icon-geren",
+    },
+    {
+      name: "学习",
+      icon: "icon-xuexi",
+    },
+    {
+      name: "搜索",
+      icon: "icon-sousuo",
+    },
+  ];
 
   constructor({
     events,
@@ -49,8 +67,19 @@ class HomeStore {
     }
   }
 
-  handleClick() {
-    this.routers?.navigate("/admin");
+  handleClick(name: string) {
+    switch (name) {
+      case "学习":
+        this.routers?.navigate("/student");
+        break;
+
+      case "个人":
+        this.routers?.navigate("/admin");
+        break;
+
+      default:
+        break;
+    }
   }
 
   handleSendWsData() {

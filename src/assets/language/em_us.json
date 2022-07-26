@@ -5,5 +5,8 @@
   "systemLanguage": "system language",
   "login": "login",
   "codeLogin": "code login",
-  "passwordLogin": "password login"
+  "passwordLogin": "password login",
+  "home": {
+    "title": "home"
+  }
 }

@@ -12,7 +12,7 @@ export const AxiosRequest = (data: AxiosRequestConfig): any => {
       return config;
     }
     if (localStorage.getItem("token")) {
-      config.headers = Object.assign(data.headers, {
+      config.headers = Object.assign(data.headers || {}, {
         token: localStorage.getItem("token") || "",
       });
       return config;
@@ -42,6 +42,7 @@ export const AxiosRequest = (data: AxiosRequestConfig): any => {
             resolve(res.data);
           })
           .catch((err) => {
+            window.location.href = "#/";
             Toast.show({ content: "服务端请求失败！", icon: "fail" });
             reject(err);
           })

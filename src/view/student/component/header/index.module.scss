@@ -1,0 +1,27 @@
+.module {
+    margin: 20px;
+    .moduleTop {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .search{
+        margin-top: 10px;
+        display: flex;
+        .searchInput{
+            flex: 1;
+            border-radius: 30px;
+            border: 2px solid #999;
+            display: block;
+            text-indent: 1rem;
+        }
+
+        .but{
+            margin-left: 10px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}
