@@ -42,6 +42,13 @@ export const unStore = (store: any) => {
   }, []);
 };
 
+export const unStoreAll = () => {
+  const stores = useContext(ContextStore);
+  useEffect(() => {
+    stores.clear();
+  }, []);
+};
+
 export type Look = {
   on: (name: string, callback: (data: any) => any, store?: any) => void;
   subscribe: (name: string, data: any, store?: any) => void;
@@ -144,5 +151,9 @@ export class CreateStore {
   unStore(store: any) {
     this.storeMap.delete(store);
     return;
+  }
+
+  clear() {
+    this.storeMap.clear();
   }
 }

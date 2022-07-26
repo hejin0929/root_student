@@ -1,0 +1,28 @@
+.studyShow {
+  margin: 20px;
+
+  .playerItems {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .deleteItems {
+      font-size: 12px;
+      padding: 5px 10px;
+    }
+  }
+
+  .record {
+    width: calc(100% - 40px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    bottom: 20px;
+
+    .stop,
+    .start {
+      width: 120px;
+    }
+  }
+}

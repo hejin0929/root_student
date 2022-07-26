@@ -10,15 +10,20 @@ const Render: FC = () => {
 
   useEffect(() => {
     store.render(ref);
+    window.addEventListener("resize", () => {
+      console.log("this is a update ");
+
+      store.render(ref);
+    });
   }, []);
 
   return (
-    <div className={StyleCss.rootRender}>
-      <canvas
+    <div className={StyleCss.rootRender} ref={ref}>
+      {/* <canvas
         id="application-canvas"
         ref={ref}
         className={StyleCss.rootCanvas}
-      ></canvas>
+      ></canvas> */}
     </div>
   );
 };

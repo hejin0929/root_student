@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { observer } from "mobx-react-lite";
 import Store, { PageStyle } from "./index.store"; // 本页面store
-import { useStore } from "@store/auth";
+import { useStore, unStoreAll } from "@store/auth";
 import StyleCss from "./index.module.scss";
 import MyForm from "@widgets/myForm";
 import Image from "@widgets/image";
@@ -9,6 +9,7 @@ import login from "@/assets/images/LOGIN.jpeg";
 import { language } from "@/config/language";
 
 const Login: FC = () => {
+  unStoreAll();
   const store: Store = useStore(Store);
 
   return (

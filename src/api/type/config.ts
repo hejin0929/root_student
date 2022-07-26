@@ -9,10 +9,27 @@ interface chumAddRes {
   mgsCode: number;
   mgsText: string;
 }
+interface chumApplyUser {
+  list: {
+    hello: string;time: string;
+  } [];
+  source: number;
+  user_id: string;
+  user_name: string
+}
+interface chumApplyUserRes {
+  body ? : chumApplyUser[];
+  mgsCode: number;
+  mgsText: string
+}
 interface chumResChum {
   body: {
+<<<<<<< HEAD
+    relation: number;source: number;user: userMessage;
+=======
     source: number;
     user: homeUserMessage;
+>>>>>>> main
   };
   mgsCode: number;
   mgsText: string;
@@ -25,6 +42,8 @@ interface getCodeResCode {
   mgsCode: number;
   mgsText: string;
 }
+<<<<<<< HEAD
+=======
 interface homeKeysRes {
   body: {
     private: string;
@@ -59,6 +78,7 @@ interface homeUserMessage {
   user_id: string;
   uuid: string;
 }
+>>>>>>> main
 interface loginUser {
   id: string;
   name: string;
@@ -91,6 +111,35 @@ interface moduleHttpErrs {
   mgsText: string;
   msgCode: number;
 }
+interface resHomeKeysRes {
+  body: {
+    private: string;public: string;
+  };
+  mgsCode: number;
+  mgsText: string
+}
+interface resHomeMessage {
+  birthday: string;
+  image: string;
+  introduce: string;
+  name: string;
+  phone: string;
+  region: string;
+  sex: number;
+  state: number;
+  user_id: string;
+  uuid: string
+}
+interface resHomeMessageRes {
+  body ? : userMessage;
+  mgsCode: number;
+  mgsText: string
+}
+interface resHomeMessageUpdateRes {
+  body ? : userMessage;
+  mgsCode: number;
+  mgsText: string
+}
 interface uploadFilesFileTest {
   code: string;
 }
@@ -98,6 +147,18 @@ interface uploadFilesFilesRes {
   body?: string;
   mgsCode: number;
   mgsText: string;
+}
+interface userMessage {
+  birthday: string;
+  image: string;
+  introduce: string;
+  name: string;
+  phone: string;
+  region: string;
+  sex: number;
+  state: number;
+  user_id: string;
+  uuid: string
 }
 
 export interface Paths {
@@ -108,6 +169,14 @@ export interface Paths {
     reqData: chumAddReq;
     type: "post";
     resData: chumAddRes;
+  };
+  "/api/chum/apply": {
+    ParamsData ? : {
+      id: string
+    };
+    reqData: undefined;
+    type: "get";
+    resData: chumApplyUserRes
   };
   "/api/chum/search/{phone}": {
     ParamsData?: {
@@ -123,7 +192,11 @@ export interface Paths {
     };
     reqData: undefined;
     type: "get";
+<<<<<<< HEAD
+    resData: resHomeKeysRes
+=======
     resData: homeKeysRes;
+>>>>>>> main
   };
   "/api/home/message": {
     ParamsData?: {
@@ -198,10 +271,17 @@ export interface Paths {
     resData: uploadFilesFilesRes;
   };
   "/api/user/user_message/update": {
+<<<<<<< HEAD
+    ParamsData ? : undefined;
+    reqData: resHomeMessage;
+    type: "post";
+    resData: resHomeMessageUpdateRes
+=======
     ParamsData?: undefined;
     reqData: homeUserMessage;
     type: "post";
     resData: homeMessageUpdateRes;
+>>>>>>> main
   };
   "/api/user/user_message/{id}": {
     ParamsData?: {
@@ -209,6 +289,12 @@ export interface Paths {
     };
     reqData: undefined;
     type: "get";
+<<<<<<< HEAD
+    resData: resHomeMessageRes
+  }
+}
+=======
     resData: homeMessageRes;
   };
 }
+>>>>>>> main
