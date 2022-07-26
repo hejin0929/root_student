@@ -1,0 +1,1 @@
+import{r as s,j as a}from"./vendor.0d2e9121.js";var i="./assets/LOGIN.db75ff2b.jpeg";const r="_imageMain_qcqoc_1";var m={imageMain:r};const o=s.exports.memo(({url:e})=>a("div",{className:m.imageMain,children:a("img",{src:e||i})}));export{o as I,i as l};
