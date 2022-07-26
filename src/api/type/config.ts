@@ -2,12 +2,12 @@ interface chumAddReq {
   friend_id: string;
   permissions: string;
   source: number;
-  uuid: string
+  uuid: string;
 }
 interface chumAddRes {
-  body ? : string;
+  body?: string;
   mgsCode: number;
-  mgsText: string
+  mgsText: string;
 }
 interface chumApplyUser {
   list: {
@@ -24,50 +24,92 @@ interface chumApplyUserRes {
 }
 interface chumResChum {
   body: {
+<<<<<<< HEAD
     relation: number;source: number;user: userMessage;
+=======
+    source: number;
+    user: homeUserMessage;
+>>>>>>> main
   };
   mgsCode: number;
-  mgsText: string
+  mgsText: string;
 }
 interface getCodeGetPhoneCode {
-  code: string
+  code: string;
 }
 interface getCodeResCode {
-  body ? : getCodeGetPhoneCode;
+  body?: getCodeGetPhoneCode;
   mgsCode: number;
-  mgsText: string
+  mgsText: string;
 }
+<<<<<<< HEAD
+=======
+interface homeKeysRes {
+  body: {
+    private: string;
+    public: string;
+  };
+  mgsCode: number;
+  mgsText: string;
+}
+interface homeMessageRes {
+  body?: homeUserMessage;
+  mgsCode: number;
+  mgsText: string;
+}
+interface homeMessageUpdate {
+  message: homeUserMessage;
+  res: string;
+}
+interface homeMessageUpdateRes {
+  body?: homeMessageUpdate;
+  mgsCode: number;
+  mgsText: string;
+}
+interface homeUserMessage {
+  birthday: string;
+  image: string;
+  introduce: string;
+  name: string;
+  phone: string;
+  region: string;
+  sex: number;
+  state: number;
+  user_id: string;
+  uuid: string;
+}
+>>>>>>> main
 interface loginUser {
   id: string;
   name: string;
-  token: string
+  token: string;
 }
 interface loginUserBody {
-  body ? : loginUser;
+  body?: loginUser;
   mgsCode: number;
-  mgsText: string
+  mgsText: string;
 }
 interface loginUserCode {
   code: string;
-  phone: string
+  phone: string;
 }
 interface loginUserName {
   password: string;
-  phone: string
+  phone: string;
 }
 interface loginUserSignReps {
-  body ? : string;
+  body?: string;
   mgsCode: number;
-  mgsText: string
+  mgsText: string;
 }
 interface loginUserSignType {
   code: string;
   password: string;
-  phone: string
+  phone: string;
 }
 interface moduleHttpErrs {
   mgsText: string;
-  msgCode: number
+  msgCode: number;
 }
 interface resHomeKeysRes {
   body: {
@@ -99,12 +141,12 @@ interface resHomeMessageUpdateRes {
   mgsText: string
 }
 interface uploadFilesFileTest {
-  code: string
+  code: string;
 }
 interface uploadFilesFilesRes {
-  body ? : string;
+  body?: string;
   mgsCode: number;
-  mgsText: string
+  mgsText: string;
 }
 interface userMessage {
   birthday: string;
@@ -121,12 +163,12 @@ interface userMessage {
 
 export interface Paths {
   "/api/chum/add": {
-    ParamsData ? : {
-      data: undefined
+    ParamsData?: {
+      data: undefined;
     };
     reqData: chumAddReq;
     type: "post";
-    resData: chumAddRes
+    resData: chumAddRes;
   };
   "/api/chum/apply": {
     ParamsData ? : {
@@ -137,105 +179,122 @@ export interface Paths {
     resData: chumApplyUserRes
   };
   "/api/chum/search/{phone}": {
-    ParamsData ? : {
-      phone: string
+    ParamsData?: {
+      phone: string;
     };
     reqData: undefined;
     type: "get";
-    resData: chumResChum
+    resData: chumResChum;
   };
   "/api/home/key": {
-    ParamsData ? : {
-      id: number
+    ParamsData?: {
+      id: number;
     };
     reqData: undefined;
     type: "get";
+<<<<<<< HEAD
     resData: resHomeKeysRes
+=======
+    resData: homeKeysRes;
+>>>>>>> main
   };
   "/api/home/message": {
-    ParamsData ? : {
-      id: number
+    ParamsData?: {
+      id: number;
     };
     reqData: undefined;
     type: "get";
-    resData: undefined
+    resData: undefined;
   };
   "/api/login/user/login": {
-    ParamsData ? : undefined;
+    ParamsData?: undefined;
     reqData: loginUserName;
     type: "post";
-    resData: loginUserBody
+    resData: loginUserBody;
   };
   "/api/login/user/login_code": {
-    ParamsData ? : undefined;
+    ParamsData?: undefined;
     reqData: loginUserCode;
     type: "post";
-    resData: loginUserBody
+    resData: loginUserBody;
   };
   "/api/login/user/sign": {
-    ParamsData ? : undefined;
+    ParamsData?: undefined;
     reqData: loginUserSignType;
     type: "post";
-    resData: loginUserSignReps
+    resData: loginUserSignReps;
   };
   "/api/phone_code/user/{phone}": {
-    ParamsData ? : {
-      phone: string
+    ParamsData?: {
+      phone: string;
     };
     reqData: undefined;
     type: "get";
-    resData: getCodeResCode
+    resData: getCodeResCode;
   };
   "/api/upload/deleteImg": {
-    ParamsData ? : {
-      name: string
+    ParamsData?: {
+      name: string;
     };
     reqData: undefined;
     type: "get";
-    resData: uploadFilesFilesRes
+    resData: uploadFilesFilesRes;
   };
   "/api/upload/deleteVideo": {
-    ParamsData ? : {
-      video: string
+    ParamsData?: {
+      video: string;
     };
     reqData: undefined;
     type: "get";
-    resData: uploadFilesFilesRes
+    resData: uploadFilesFilesRes;
   };
   "/api/upload/images": {
-    ParamsData ? : {
-      image: File
+    ParamsData?: {
+      image: File;
     };
     reqData: undefined;
     type: "post";
-    resData: uploadFilesFilesRes
+    resData: uploadFilesFilesRes;
   };
   "/api/upload/test": {
-    ParamsData ? : undefined;
+    ParamsData?: undefined;
     reqData: uploadFilesFileTest;
     type: "post";
-    resData: uploadFilesFilesRes
+    resData: uploadFilesFilesRes;
   };
   "/api/upload/videos": {
-    ParamsData ? : {
-      videos: File
+    ParamsData?: {
+      videos: File;
     };
     reqData: undefined;
     type: "post";
-    resData: uploadFilesFilesRes
+    resData: uploadFilesFilesRes;
   };
   "/api/user/user_message/update": {
+<<<<<<< HEAD
     ParamsData ? : undefined;
     reqData: resHomeMessage;
     type: "post";
     resData: resHomeMessageUpdateRes
+=======
+    ParamsData?: undefined;
+    reqData: homeUserMessage;
+    type: "post";
+    resData: homeMessageUpdateRes;
+>>>>>>> main
   };
   "/api/user/user_message/{id}": {
-    ParamsData ? : {
-      id: string
+    ParamsData?: {
+      id: string;
     };
     reqData: undefined;
     type: "get";
+<<<<<<< HEAD
     resData: resHomeMessageRes
   }
 }
+=======
+    resData: homeMessageRes;
+  };
+}
+>>>>>>> main
